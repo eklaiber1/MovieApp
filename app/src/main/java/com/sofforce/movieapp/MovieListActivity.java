@@ -39,7 +39,7 @@ public class MovieListActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=d1f925a5aeb4aa7d747ae5746a2a3b9d");
+                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=");
             }
         });
 
@@ -62,13 +62,13 @@ public class MovieListActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_mostPopular:
 
-                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=d1f925a5aeb4aa7d747ae5746a2a3b9d");
+                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=");
 
                 return true;
 
             case R.id.action_toprated:
 
-                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/top_rated?api_key=d1f925a5aeb4aa7d747ae5746a2a3b9d");
+                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/top_rated?api_key=");
 
                 return true;
         }
