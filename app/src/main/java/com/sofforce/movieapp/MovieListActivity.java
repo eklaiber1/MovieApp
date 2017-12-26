@@ -39,7 +39,7 @@ public class MovieListActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?");
+                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=d1f925a5aeb4aa7d747ae5746a2a3b9d");
             }
         });
 
@@ -62,25 +62,15 @@ public class MovieListActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_mostPopular:
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=d1f925a5aeb4aa7d747ae5746a2a3b9d");
 
-                        new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=");
-                    }
-                });
-                break;
+                return true;
 
             case R.id.action_toprated:
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/top_rated?api_key=d1f925a5aeb4aa7d747ae5746a2a3b9d");
 
-                        new  ReadJSON02().execute("http://api.themoviedb.org/3/movie/top_rated?api_key=");
-                    }
-                });
-                break;
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -122,36 +112,36 @@ public class MovieListActivity extends AppCompatActivity {
     }
 
     //comment005 this is the JSON that will parse the data
-    class ReadJSON02 extends AsyncTask<String, Integer, String>{
-
-        @Override
-        protected String doInBackground(String... params) {
-            return readsURL(params[0]);
-        }
-
-
-        @Override
-        protected void onPostExecute(String content) {
-
-            try {
-                JSONObject jsonObject = new JSONObject(content);
-                JSONArray jsonArray = jsonObject.getJSONArray("results");
-
-                for (int i=0; i<jsonArray.length(); i++) {
-                    JSONObject detailedObjects = jsonArray.getJSONObject(i);
-                    arrayList.add(new MovieStat(detailedObjects.getString("poster_path")
-                    ));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            CustomListAdapter02 adapter02 = new CustomListAdapter02(
-                    getApplicationContext(), R.id.movieListgrid, arrayList
-            );
-            theGridview.setAdapter(adapter02);
-        }
-
-    }
+//    class ReadJSON02 extends AsyncTask<String, Integer, String>{
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            return readsURL(params[0]);
+//        }
+//
+//
+//        @Override
+//        protected void onPostExecute(String content) {
+//
+//            try {
+//                JSONObject jsonObject = new JSONObject(content);
+//                JSONArray jsonArray = jsonObject.getJSONArray("results");
+//
+//                for (int i=0; i<jsonArray.length(); i++) {
+//                    JSONObject detailedObjects = jsonArray.getJSONObject(i);
+//                    arrayList.add(new MovieStat(detailedObjects.getString("poster_path")
+//                    ));
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            CustomListAdapter02 adapter02 = new CustomListAdapter02(
+//                    getApplicationContext(), R.id.movieListgrid, arrayList
+//            );
+//            theGridview.setAdapter(adapter02);
+//        }
+//
+//    }
 
 
 

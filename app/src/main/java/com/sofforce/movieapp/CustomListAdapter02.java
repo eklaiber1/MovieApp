@@ -71,4 +71,10 @@ public class CustomListAdapter02 extends ArrayAdapter<MovieStat>{
         return convertView;
 
     }
+
+    @Override
+    public int getCount() {
+        return moviepics != null?
+                moviepics.size():0;
+    }
 }
