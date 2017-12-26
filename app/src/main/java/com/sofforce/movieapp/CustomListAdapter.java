@@ -33,9 +33,11 @@ public class CustomListAdapter extends ArrayAdapter<MovieStat> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
+        String pref ="http://image.tmdb.org/t/p/w500";
+
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.detailedview, null, true);
+            convertView = layoutInflater.inflate(R.layout.item_view, null, true);
 
         }
 
@@ -57,12 +59,18 @@ public class CustomListAdapter extends ArrayAdapter<MovieStat> {
 //        txtoverview.setText(movieItems.getOverview());
 
 
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.grid_item_image);
-        Picasso.with(context).load(movieItems.getPoster_path()).into(imageView);
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.item);
+        Picasso.with(context).load(pref+movieItems.getPoster_path()).into(imageView);
 
         return convertView;
 
 
+    }
+
+    @Override
+    public int getCount() {
+        return moviepics != null?
+               moviepics.size():0;
     }
 
 }

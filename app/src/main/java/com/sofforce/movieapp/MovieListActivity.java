@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.GridView;
 
 import org.json.JSONArray;
@@ -23,7 +24,7 @@ public class MovieListActivity extends AppCompatActivity {
     ArrayList<MovieStat> arrayList;
     GridView theGridview;
 
-
+    //comment001 this is the onCreate method that initiate the program
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,18 +39,14 @@ public class MovieListActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key="");
+                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?");
             }
         });
-
-
 
     }
 
 
-
-
-    //this is to inflate the menu on the actionbar
+    //comment002 this is to inflate the menu on the actionbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -59,7 +56,40 @@ public class MovieListActivity extends AppCompatActivity {
     }
 
 
-    //this is the JSON that will parse the data
+    //comment003 this is the method that runs when you click on an item in the menu
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_mostPopular:
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=");
+                    }
+                });
+                break;
+
+            case R.id.action_toprated:
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        new  ReadJSON02().execute("http://api.themoviedb.org/3/movie/top_rated?api_key=");
+                    }
+                });
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+
+
+    //comment004 this is the JSON that will parse the data
     class ReadJSON extends AsyncTask<String, Integer, String>{
 
         @Override
@@ -83,7 +113,7 @@ public class MovieListActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            CustomListAdapter02 adapter = new CustomListAdapter02(
+            CustomListAdapter adapter = new CustomListAdapter(
                     getApplicationContext(), R.id.movieListgrid, arrayList
             );
             theGridview.setAdapter(adapter);
@@ -91,12 +121,45 @@ public class MovieListActivity extends AppCompatActivity {
 
     }
 
+    //comment005 this is the JSON that will parse the data
+    class ReadJSON02 extends AsyncTask<String, Integer, String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+            return readsURL(params[0]);
+        }
+
+
+        @Override
+        protected void onPostExecute(String content) {
+
+            try {
+                JSONObject jsonObject = new JSONObject(content);
+                JSONArray jsonArray = jsonObject.getJSONArray("results");
+
+                for (int i=0; i<jsonArray.length(); i++) {
+                    JSONObject detailedObjects = jsonArray.getJSONObject(i);
+                    arrayList.add(new MovieStat(detailedObjects.getString("poster_path")
+                    ));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            CustomListAdapter02 adapter02 = new CustomListAdapter02(
+                    getApplicationContext(), R.id.movieListgrid, arrayList
+            );
+            theGridview.setAdapter(adapter02);
+        }
+
+    }
 
 
 
-    //this is the uri builder and the connection to the URL
+
+    //comment006 this is the uri builder and the connection to the URL
     private static String readsURL(String theUrl){
         StringBuilder content =  new StringBuilder();
+
         try {
             URL url  = new URL(theUrl);
             URLConnection urlConnection =  url.openConnection();

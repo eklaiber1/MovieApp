@@ -37,9 +37,12 @@ public class CustomListAdapter02 extends ArrayAdapter<MovieStat>{
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
+        String pref = "http://image.tmdb.org/t/p/w500";
+
+
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.movie_list, null, true);
+            convertView = layoutInflater.inflate(R.layout.item_view, null, true);
 
         }
 
@@ -51,19 +54,19 @@ public class CustomListAdapter02 extends ArrayAdapter<MovieStat>{
 //
 //        TextView txtyear = (TextView) convertView.findViewById(R.id.movie_year);
 //        txtyear.setText(movieItems.getRelease_date());
-
+//
 //        TextView txtrating = (TextView) convertView.findViewById(R.id.movie_rating);
-//        txtrating.setText(movieItems.getVote_average());
+//        txtrating.setText(Double.valueOf(movieItems.getVote_average()));
 
-        //     TextView txttime = (TextView) convertView.findViewById(R.id.movie_duration);
-        //     txttime.setText(movieItems.getTitle());
+//        TextView txttime = (TextView) convertView.findViewById(R.id.movie_duration);
+//        txttime.setText(movieItems.getTitle());
 
 //        TextView txtoverview = (TextView) convertView.findViewById(R.id.movie_overview);
 //        txtoverview.setText(movieItems.getOverview());
 
 
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.movieListgrid);
-        Picasso.with(context).load(movieItems.getPoster_path()).into(imageView);
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.item);
+        Picasso.with(context).load(pref+movieItems.getPoster_path()).into(imageView);
 
         return convertView;
 
