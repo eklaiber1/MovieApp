@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -37,35 +38,35 @@ public class CustomListAdapter02 extends ArrayAdapter<MovieStat>{
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        String pref = "http://image.tmdb.org/t/p/w500";
+        String pref = "http://image.tmdb.org/t/p/w342";
 
 
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.item_view, null, true);
+            convertView = layoutInflater.inflate(R.layout.detailedview, null, true);
 
         }
 
         MovieStat movieItems = getItem(position);
 
 
-//        TextView txtname = (TextView) convertView.findViewById(R.id.marquee_title);
-//        txtname.setText(movieItems.getTitle());
-//
-//        TextView txtyear = (TextView) convertView.findViewById(R.id.movie_year);
-//        txtyear.setText(movieItems.getRelease_date());
-//
+        TextView txtname = (TextView) convertView.findViewById(R.id.marquee_title);
+        txtname.setText(movieItems.getTitle());
+
+        TextView txtyear = (TextView) convertView.findViewById(R.id.movie_year);
+        txtyear.setText(movieItems.getRelease_date());
+
 //        TextView txtrating = (TextView) convertView.findViewById(R.id.movie_rating);
-//        txtrating.setText(Double.valueOf(movieItems.getVote_average()));
+//        txtrating.setText(movieItems.getVote_average());
 
-//        TextView txttime = (TextView) convertView.findViewById(R.id.movie_duration);
-//        txttime.setText(movieItems.getTitle());
+        TextView txttime = (TextView) convertView.findViewById(R.id.movie_duration);
+        txttime.setText(movieItems.getTitle());
 
-//        TextView txtoverview = (TextView) convertView.findViewById(R.id.movie_overview);
-//        txtoverview.setText(movieItems.getOverview());
+        TextView txtoverview = (TextView) convertView.findViewById(R.id.movie_overview);
+        txtoverview.setText(movieItems.getOverview());
 
 
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.item);
+        ImageView imageView = (ImageView) convertView.findViewById(R.id.grid_item_image);
         Picasso.with(context).load(pref+movieItems.getPoster_path()).into(imageView);
 
         return convertView;

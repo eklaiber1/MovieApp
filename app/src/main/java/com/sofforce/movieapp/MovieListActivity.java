@@ -1,12 +1,17 @@
 package com.sofforce.movieapp;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
 import org.json.JSONArray;
@@ -42,6 +47,29 @@ public class MovieListActivity extends AppCompatActivity {
                 new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=");
             }
         });
+
+        arrayList = new ArrayList<MovieStat>();
+        theGridview.setAdapter(new ArrayAdapter<CustomListAdapter02>(
+                this, R.layout.detailedview, arrayList
+        ));
+
+        //comment001.1 this will send you to the detailedview when you click on a image
+        theGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                String selectedItem = adapterView.getItemAtPosition(i).toString();
+
+                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+                view = layoutInflater.inflate(R.layout.detailedview, null, true);
+
+            }
+        });
+
+
+
+
 
     }
 
@@ -82,6 +110,8 @@ public class MovieListActivity extends AppCompatActivity {
     //comment004 this is the JSON that will parse the data
     class ReadJSON extends AsyncTask<String, Integer, String>{
 
+
+
         @Override
         protected String doInBackground(String... params) {
             return readsURL(params[0]);
@@ -90,6 +120,8 @@ public class MovieListActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String content) {
+
+            arrayList.clear();
 
             try {
                 JSONObject jsonObject = new JSONObject(content);

@@ -6,7 +6,7 @@ package com.sofforce.movieapp;
 
 public class MovieStat {
 
-    //this class is going to be the model viewer for the json object to parse
+    //this class is going to be the MVC model viewer controller for the json object to parse
 
 
     //this is the name of the movie
