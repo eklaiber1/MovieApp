@@ -1,17 +1,15 @@
 package com.sofforce.movieapp;
 
-import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
 
 import org.json.JSONArray;
@@ -48,11 +46,11 @@ public class MovieListActivity extends AppCompatActivity {
             }
         });
 
-        arrayList = new ArrayList<MovieStat>();
-        theGridview.setAdapter(new ArrayAdapter<CustomListAdapter02>(
-                this, R.layout.detailedview, arrayList
-        ));
-
+//        arrayList = new ArrayList<MovieStat>();
+//        theGridview.setAdapter(new ArrayAdapter<CustomListAdapter>(
+//                this, R.layout.detailedview, arrayList
+//        ));
+//
         //comment001.1 this will send you to the detailedview when you click on a image
         theGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -61,8 +59,15 @@ public class MovieListActivity extends AppCompatActivity {
 
                 String selectedItem = adapterView.getItemAtPosition(i).toString();
 
-                LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-                view = layoutInflater.inflate(R.layout.detailedview, null, true);
+
+                Intent mIntent =  new Intent(MovieListActivity.this, DetailedActivity.class);
+                mIntent.putExtra("selectedItem", arrayList.get(i));
+                mIntent.putExtra("title", getTitle());
+                mIntent.putExtra("release_date", //what am i putting here//);
+                mIntent.putExtra("vote_average", //what am i putting here//);
+                mIntent.putExtra("overview", //what am i putting here//);
+                mIntent.putExtra("poster_path", //what am i putting here//);
+                startActivity(mIntent);
 
             }
         });
@@ -82,6 +87,8 @@ public class MovieListActivity extends AppCompatActivity {
         inflater.inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+
 
 
     //comment003 this is the method that runs when you click on an item in the menu
@@ -143,42 +150,12 @@ public class MovieListActivity extends AppCompatActivity {
 
     }
 
-    //comment005 this is the JSON that will parse the data
-//    class ReadJSON02 extends AsyncTask<String, Integer, String>{
-//
-//        @Override
-//        protected String doInBackground(String... params) {
-//            return readsURL(params[0]);
-//        }
-//
-//
-//        @Override
-//        protected void onPostExecute(String content) {
-//
-//            try {
-//                JSONObject jsonObject = new JSONObject(content);
-//                JSONArray jsonArray = jsonObject.getJSONArray("results");
-//
-//                for (int i=0; i<jsonArray.length(); i++) {
-//                    JSONObject detailedObjects = jsonArray.getJSONObject(i);
-//                    arrayList.add(new MovieStat(detailedObjects.getString("poster_path")
-//                    ));
-//                }
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            CustomListAdapter02 adapter02 = new CustomListAdapter02(
-//                    getApplicationContext(), R.id.movieListgrid, arrayList
-//            );
-//            theGridview.setAdapter(adapter02);
-//        }
-//
-//    }
 
 
 
 
-    //comment006 this is the uri builder and the connection to the URL
+
+    //comment005 this is the uri builder and the connection to the URL
     private static String readsURL(String theUrl){
         StringBuilder content =  new StringBuilder();
 
