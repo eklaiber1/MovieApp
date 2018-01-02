@@ -42,7 +42,7 @@ public class MovieListActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=");
+                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=);
             }
         });
 
@@ -57,16 +57,14 @@ public class MovieListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                String selectedItem = adapterView.getItemAtPosition(i).toString();
-
+                MovieStat movie = arrayList.get(i);
 
                 Intent mIntent =  new Intent(MovieListActivity.this, DetailedActivity.class);
-                mIntent.putExtra("selectedItem", arrayList.get(i));
-                mIntent.putExtra("title", getTitle());
-                mIntent.putExtra("release_date", //what am i putting here//);
-                mIntent.putExtra("vote_average", //what am i putting here//);
-                mIntent.putExtra("overview", //what am i putting here//);
-                mIntent.putExtra("poster_path", //what am i putting here//);
+                mIntent.putExtra("title", movie.getTitle());
+                mIntent.putExtra("release_date", movie.getRelease_date());
+                mIntent.putExtra("vote_average", movie.getVote_average());
+                mIntent.putExtra("overview", movie.getOverview());
+                mIntent.putExtra("poster_path", movie.getPoster_path());
                 startActivity(mIntent);
 
             }

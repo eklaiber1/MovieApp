@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -55,6 +56,22 @@ public class CustomListAdapter extends ArrayAdapter<MovieStat> {
         }
 
         MovieStat movieItems = getItem(position);
+
+        TextView txtname = (TextView) convertView.findViewById(R.id.marquee_title);
+        txtname.setText(movieItems.getTitle());
+
+        TextView txtyear = (TextView) convertView.findViewById(R.id.movie_year);
+        txtyear.setText(movieItems.getRelease_date());
+
+        TextView txtrating = (TextView) convertView.findViewById(R.id.movie_rating);
+        txtrating.setText(String.valueOf(movieItems.getVote_average()));
+
+        TextView txttime = (TextView) convertView.findViewById(R.id.movie_duration);
+        txttime.setText(movieItems.getTitle());
+
+        TextView txtoverview = (TextView) convertView.findViewById(R.id.movie_overview);
+        txtoverview.setText(movieItems.getOverview());
+
 
         mviewholder.imageView = (ImageView) convertView.findViewById(R.id.item);
         Picasso.with(context).load(pref+movieItems.getPoster_path()).into(mviewholder.imageView);
