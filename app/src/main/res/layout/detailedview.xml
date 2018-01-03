@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sofforce.movieapp.DetailedviewActivity">
+    tools:context="com.sofforce.movieapp.DetailedActivity">
 
     <include
         layout="@layout/customtoolbar_main"
@@ -48,12 +48,11 @@
         android:layout_alignBottom="@+id/grid_item_image"
         android:layout_marginStart="40dp"
         android:layout_marginTop="48dp"
-        android:layout_toEndOf="@+id/movie_duration"
-        android:layout_toRightOf="@+id/movie_duration"
         android:hint="rating"
         android:textSize="12dp"
         app:layout_constraintStart_toEndOf="@+id/grid_item_image"
-        app:layout_constraintTop_toBottomOf="@+id/movie_year" />
+        app:layout_constraintTop_toBottomOf="@+id/movie_year"
+        tools:ignore="UnknownId" />
 
 
     <TextView
@@ -70,7 +69,6 @@
         android:id="@+id/movie_overview"
         android:layout_width="298dp"
         android:layout_height="48dp"
-        android:layout_below="@+id/movie_duration"
         android:layout_marginTop="24dp"
         android:layout_toLeftOf="@+id/movie_year"
         android:layout_toStartOf="@+id/movie_year"
