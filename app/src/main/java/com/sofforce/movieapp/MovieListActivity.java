@@ -42,7 +42,7 @@ public class MovieListActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=);
+                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=");
             }
         });
 
