@@ -40,7 +40,7 @@ public class DetailedActivity extends AppCompatActivity {
             txtoverview.setText(mbundle.getString("overview"));
             txtyear.setText(mbundle.getString("release_date"));
             String url = mbundle.getString("poster_path");
-            Picasso.with(this).load(url).into(imageView);
+            Picasso.with(this).load(pref+url).into(imageView);
 
         }
 
