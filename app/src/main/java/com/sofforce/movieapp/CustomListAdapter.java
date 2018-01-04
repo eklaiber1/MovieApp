@@ -34,6 +34,10 @@ public class CustomListAdapter extends ArrayAdapter<MovieStat> {
     static class ViewHolder {
 
         ImageView imageView;
+        TextView txtname;
+        TextView txtyear;
+        TextView txtrating;
+        TextView txtoverview;
 
     }
 
@@ -47,30 +51,38 @@ public class CustomListAdapter extends ArrayAdapter<MovieStat> {
 
         ViewHolder mviewholder = new ViewHolder();
 
-        if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.item_view, parent, false);
-            convertView.setTag(mviewholder);
-        } else {
-            mviewholder =(ViewHolder) convertView.getTag();
+        try {
+
+            if (convertView == null) {
+                LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+                convertView = layoutInflater.inflate(R.layout.item_view, parent, false);
+                convertView.setTag(mviewholder);
+            } else {
+                mviewholder = (ViewHolder) convertView.getTag();
+            }
+
+            MovieStat movieItems = getItem(position);
+
+             mviewholder.txtname = (TextView) convertView.findViewById(R.id.marquee_title);
+             mviewholder.txtname.setText(movieItems.getTitle());
+
+             mviewholder.txtyear = (TextView) convertView.findViewById(R.id.movie_year);
+             mviewholder.txtyear.setText(movieItems.getRelease_date());
+
+             mviewholder.txtrating = (TextView) convertView.findViewById(R.id.movie_rating);
+             mviewholder.txtrating.setText(String.valueOf(movieItems.getVote_average()));
+
+             mviewholder.txtoverview = (TextView) convertView.findViewById(R.id.movie_overview);
+             mviewholder.txtoverview.setText(movieItems.getOverview());
+
+            mviewholder.imageView = (ImageView) convertView.findViewById(R.id.item);
+            Picasso.with(context).load(pref+movieItems.getPoster_path()).into(mviewholder.imageView);
+
+
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
-
-        MovieStat movieItems = getItem(position);
-
-        TextView txtname = (TextView) convertView.findViewById(R.id.marquee_title);
-        txtname.setText(movieItems.getTitle());
-
-        TextView txtyear = (TextView) convertView.findViewById(R.id.movie_year);
-        txtyear.setText(movieItems.getRelease_date());
-
-        TextView txtrating = (TextView) convertView.findViewById(R.id.movie_rating);
-        txtrating.setText(String.valueOf(movieItems.getVote_average()));
-
-        TextView txtoverview = (TextView) convertView.findViewById(R.id.movie_overview);
-        txtoverview.setText(movieItems.getOverview());
-
-        mviewholder.imageView = (ImageView) convertView.findViewById(R.id.item);
-        Picasso.with(context).load(pref+movieItems.getPoster_path()).into(mviewholder.imageView);
 
         return convertView;
 

@@ -1,6 +1,5 @@
 package com.sofforce.movieapp;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
@@ -27,7 +26,6 @@ public class DetailedActivity extends AppCompatActivity {
         setContentView(R.layout.detailedview);
 
         String pref ="http://image.tmdb.org/t/p/w342";
-        Context context;
 
         TextView txtname = (TextView) findViewById(R.id.marquee_title);
         TextView txtrating = (TextView) findViewById(R.id.movie_rating);
@@ -42,7 +40,7 @@ public class DetailedActivity extends AppCompatActivity {
             txtoverview.setText(mbundle.getString("overview"));
             txtyear.setText(mbundle.getString("release_date"));
             String url = mbundle.getString("poster_path");
-            Picasso.load(url).into(imageView);
+            Picasso.with(this).load(url).into(imageView);
 
         }
 

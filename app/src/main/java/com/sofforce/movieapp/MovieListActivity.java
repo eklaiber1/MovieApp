@@ -46,11 +46,8 @@ public class MovieListActivity extends AppCompatActivity {
             }
         });
 
-//        arrayList = new ArrayList<MovieStat>();
-//        theGridview.setAdapter(new ArrayAdapter<CustomListAdapter>(
-//                this, R.layout.detailedview, arrayList
-//        ));
-//
+
+
         //comment001.1 this will send you to the detailedview when you click on a image
         theGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
