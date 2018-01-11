@@ -14,11 +14,13 @@ import com.squareup.picasso.Picasso;
 public class DetailedActivity extends AppCompatActivity {
 
 
-    TextView txtname;
-    TextView txtrating;
-    TextView txtoverview;
-    TextView txtyear;
+    TextView txtName;
+    TextView txtRating;
+    TextView txtOverview;
+    TextView txtYear;
     ImageView imageView;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,23 +29,24 @@ public class DetailedActivity extends AppCompatActivity {
 
         String pref ="http://image.tmdb.org/t/p/w342";
 
-        TextView txtname = (TextView) findViewById(R.id.marquee_title);
-        TextView txtrating = (TextView) findViewById(R.id.movie_rating);
-        TextView txtoverview = (TextView) findViewById(R.id.movie_overview);
-        TextView txtyear = (TextView) findViewById(R.id.movie_year);
-        ImageView imageView = (ImageView) findViewById(R.id.grid_item_image);
+         txtName = (TextView) findViewById(R.id.marquee_title);
+         txtRating = (TextView) findViewById(R.id.movie_rating);
+         txtOverview = (TextView) findViewById(R.id.movie_overview);
+         txtYear = (TextView) findViewById(R.id.movie_year);
+         imageView = (ImageView) findViewById(R.id.grid_item_image);
 
         Bundle mbundle =  getIntent().getExtras();
         if (mbundle != null) {
-            txtname.setText(mbundle.getString("title"));
-            txtrating.setText(mbundle.getString("vote_average"));
-            txtoverview.setText(mbundle.getString("overview"));
-            txtyear.setText(mbundle.getString("release_date"));
+            txtName.setText(mbundle.getString("title"));
+            txtRating.setText(mbundle.getString("vote_average"));
+            txtOverview.setText(mbundle.getString("overview"));
+            txtYear.setText(mbundle.getString("release_date"));
             String url = mbundle.getString("poster_path");
             Picasso.with(this).load(pref+url).into(imageView);
 
-        }
 
+
+        }
 
 
 

@@ -34,10 +34,17 @@ public class MovieStat {
     private Double vote_average;
 
 
-    public MovieStat(String poster_path) {
+    public MovieStat(String title, String poster_path, Double popularity, String backdrop_path, Double vote_count,  String release_date, Double vote_average, String overview) {
 
-
+        this.title = title;
         this.poster_path = poster_path;
+        this.popularity = popularity;
+        this.backdrop_path = backdrop_path;
+        this.vote_count = vote_count;
+        this.release_date = release_date;
+        this.vote_average = vote_average;
+        this.overview = overview;
+
 
     }
 
@@ -49,8 +56,6 @@ public class MovieStat {
         this.title = title;
     }
 
-
-
     public Double getPopularity() {
         return popularity;
     }
@@ -59,7 +64,21 @@ public class MovieStat {
         this.popularity = popularity;
     }
 
+    public String getBackdrop_path() {
+        return backdrop_path;
+    }
 
+    public void setBackdrop_path(String backdrop_path) {
+        this.backdrop_path = backdrop_path;
+    }
+
+    public Double getVote_count() {
+        return vote_count;
+    }
+
+    public void setVote_count(Double vote_count) {
+        this.vote_count = vote_count;
+    }
 
     public String getPoster_path() {
         return poster_path;
@@ -71,32 +90,12 @@ public class MovieStat {
 
 
 
-    public String getBackdrop_path() {
-        return backdrop_path;
-    }
-
-    public void setBackdrop_path(String backdrop_path) {
-        this.backdrop_path = backdrop_path;
-    }
-
-
-
     public String getOverview() {
         return overview;
     }
 
     public void setOverview(String overview) {
         this.overview = overview;
-    }
-
-
-
-    public Double getVote_count() {
-        return vote_count;
-    }
-
-    public void setVote_count(Double vote_count) {
-        this.vote_count = vote_count;
     }
 
 

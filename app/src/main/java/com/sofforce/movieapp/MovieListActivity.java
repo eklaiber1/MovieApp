@@ -42,7 +42,7 @@ public class MovieListActivity extends AppCompatActivity {
             @Override
             public void run() {
 
-                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=");
+                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=/* use your own API key */");
             }
         });
 
@@ -59,7 +59,7 @@ public class MovieListActivity extends AppCompatActivity {
                 Intent mIntent =  new Intent(MovieListActivity.this, DetailedActivity.class);
                 mIntent.putExtra("title", movie.getTitle());
                 mIntent.putExtra("release_date", movie.getRelease_date());
-                mIntent.putExtra("vote_average", movie.getVote_average());
+                mIntent.putExtra("vote_average", String.valueOf(movie.getVote_average()));
                 mIntent.putExtra("overview", movie.getOverview());
                 mIntent.putExtra("poster_path", movie.getPoster_path());
                 startActivity(mIntent);
@@ -92,13 +92,13 @@ public class MovieListActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.action_mostPopular:
 
-                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=");
+                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=/* use your own API key */");
 
                 return true;
 
             case R.id.action_toprated:
 
-                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/top_rated?api_key=");
+                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/top_rated?api_key=/* use your own API key */");
 
                 return true;
         }
@@ -128,11 +128,17 @@ public class MovieListActivity extends AppCompatActivity {
             try {
                 JSONObject jsonObject = new JSONObject(content);
                 JSONArray jsonArray = jsonObject.getJSONArray("results");
-
                 for (int i=0; i<jsonArray.length(); i++) {
-                     JSONObject detailedObjects = jsonArray.getJSONObject(i);
-                     arrayList.add(new MovieStat(detailedObjects.getString("poster_path")
-                             ));
+                    JSONObject detailedObjects = jsonArray.getJSONObject(i);
+                    arrayList.add(new MovieStat( detailedObjects.getString("title"),
+                            detailedObjects.getString("poster_path"),
+                            Double.valueOf(detailedObjects.getString("popularity")),
+                            detailedObjects.getString("backdrop_path"),
+                            Double.valueOf(detailedObjects.getString("vote_count")),
+                            detailedObjects.getString("release_date"),
+                            Double.valueOf(detailedObjects.getString("vote_average")),
+                            detailedObjects.getString("overview")
+                    ));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -144,9 +150,6 @@ public class MovieListActivity extends AppCompatActivity {
         }
 
     }
-
-
-
 
 
 

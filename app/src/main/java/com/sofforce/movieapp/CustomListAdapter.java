@@ -33,10 +33,10 @@ public class CustomListAdapter extends ArrayAdapter<MovieStat> {
     static class ViewHolder {
 
         ImageView imageView;
-//        TextView txtname;
-//        TextView txtyear;
-//        TextView txtrating;
-//        TextView txtoverview;
+//        TextView txtName;
+//        TextView txtYear;
+//        TextView txtRating;
+//        TextView txtOverview;
 
     }
 
@@ -62,17 +62,19 @@ public class CustomListAdapter extends ArrayAdapter<MovieStat> {
 
             MovieStat movieItems = getItem(position);
 
-//             TextView txtname = (TextView) convertView.findViewById(R.id.marquee_title);
-//             txtname.setText(movieItems.getTitle());
+//             TextView txtName = (TextView) convertView.findViewById(R.id.marquee_title);
+//             txtName.setText(movieItems.getTitle());
 //
-//             TextView txtyear = (TextView) convertView.findViewById(R.id.movie_year);
-//             txtyear.setText(movieItems.getRelease_date());
+//             TextView txtYear = (TextView) convertView.findViewById(R.id.movie_year);
+//             txtYear.setText(movieItems.getRelease_date());
 //
-//             TextView txtrating = (TextView) convertView.findViewById(R.id.movie_rating);
-//             txtrating.setText(String.valueOf(movieItems.getVote_average()));
+//             TextView txtRating = (TextView) convertView.findViewById(R.id.movie_rating);
+//             txtRating.setText(String.valueOf(movieItems.getVote_average()));
 //
-//             TextView txtoverview = (TextView) convertView.findViewById(R.id.movie_overview);
-//             txtoverview.setText(movieItems.getOverview());
+//             TextView txtOverview = (TextView) convertView.findViewById(R.id.movie_overview);
+//             txtOverview.setText(movieItems.getOverview());
+
+
 
             mviewholder.imageView = (ImageView) convertView.findViewById(R.id.item);
             Picasso.with(context).load(pref+movieItems.getPoster_path()).into(mviewholder.imageView);
