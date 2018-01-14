@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.sofforce.movieapp">
+          xmlns:app="http://schemas.android.com/apk/res-auto"
+          package="com.sofforce.movieapp">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
 
     <application
         android:allowBackup="true"
@@ -11,7 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MovieListActivity">
+
+        <activity android:name=".MovieListActivity"
+                  android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,14 +25,18 @@
 
         </activity>
 
+        <activity android:name=".DetailedActivity"
+                  android:label="@string/details"
+                  android:parentActivityName=".MovieListActivity" >
+                   <meta-data
+                       android:name="android.support.PARENT_ACTIVITY"
+                       android:value=".MovieListActivity"/>
+        </activity>
+
         <activity android:name=".CustomListAdapter">
 
         </activity>
 
-
-        <activity android:name=".DetailedActivity">
-
-        </activity>
     </application>
 
 </manifest>

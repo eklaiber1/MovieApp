@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +27,7 @@ public class MovieListActivity extends AppCompatActivity {
 
     ArrayList<MovieStat> arrayList;
     GridView theGridview;
+    ConnectionDetector cd =  new ConnectionDetector(this);
 
     //comment001 this is the onCreate method that initiate the program
     @Override
@@ -38,17 +40,19 @@ public class MovieListActivity extends AppCompatActivity {
         arrayList = new ArrayList<>();
         theGridview = (GridView) findViewById(R.id.movieListgrid);
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
 
-                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=/* use your own API key */");
-            }
-        });
+                if (cd.isConnected()) {
+                    Toast.makeText(MovieListActivity.this, "You are connected", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MovieListActivity.this, "You are not connected", Toast.LENGTH_SHORT).show();
+
+                }
+
+        new ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=");
 
 
 
-        //comment001.1 this will send you to the detailedview when you click on a image
+        //comment002 this will send you to the detailedview when you click on a image
         theGridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -58,23 +62,21 @@ public class MovieListActivity extends AppCompatActivity {
 
                 Intent mIntent =  new Intent(MovieListActivity.this, DetailedActivity.class);
                 mIntent.putExtra("title", movie.getTitle());
-                mIntent.putExtra("release_date", movie.getRelease_date());
-                mIntent.putExtra("vote_average", String.valueOf(movie.getVote_average()));
+                mIntent.putExtra("release_date", movie.getReleaseDate());
+                mIntent.putExtra("vote_average", String.valueOf(movie.getVoteAverage()));
                 mIntent.putExtra("overview", movie.getOverview());
-                mIntent.putExtra("poster_path", movie.getPoster_path());
+                mIntent.putExtra("poster_path", movie.getPosterPath());
+                mIntent.putExtra("id", String.valueOf(movie.getIdNumber()));
+
                 startActivity(mIntent);
 
             }
         });
 
-
-
-
-
     }
 
 
-    //comment002 this is to inflate the menu on the actionbar
+    //comment003 this is to inflate the menu on the actionbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -86,19 +88,33 @@ public class MovieListActivity extends AppCompatActivity {
 
 
 
-    //comment003 this is the method that runs when you click on an item in the menu
+    //comment004 this is the method that runs when you click on an item in the menu
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_mostPopular:
 
-                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=/* use your own API key */");
+                if (cd.isConnected()) {
+                    Toast.makeText(MovieListActivity.this, "You are connected", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MovieListActivity.this, "You are not connected", Toast.LENGTH_SHORT).show();
+
+                }
+
+                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/popular?api_key=");
 
                 return true;
 
             case R.id.action_toprated:
 
-                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/top_rated?api_key=/* use your own API key */");
+                if (cd.isConnected()) {
+                    Toast.makeText(MovieListActivity.this, "You are connected", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(MovieListActivity.this, "You are not connected", Toast.LENGTH_SHORT).show();
+
+                }
+
+                new  ReadJSON().execute("http://api.themoviedb.org/3/movie/top_rated?api_key=");
 
                 return true;
         }
@@ -107,54 +123,54 @@ public class MovieListActivity extends AppCompatActivity {
 
 
 
+    //comment005 this is the JSON that will parse the data
+//    class ReadJSON extends AsyncTask<String, Integer, String>{
+//
+//
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            return readsURL(params[0]);
+//        }
+//
+//
+//        @Override
+//        protected void onPostExecute(String content) {
+//
+//            arrayList.clear();
+//
+//            try {
+//                JSONObject jsonObject = new JSONObject(content);
+//                JSONArray jsonArray = jsonObject.getJSONArray("results");
+//                for (int i=0; i<jsonArray.length(); i++) {
+//                    JSONObject detailedObjects = jsonArray.getJSONObject(i);
+//                    arrayList.add(new MovieStat( detailedObjects.getString("title"),
+//                            detailedObjects.getString("poster_path"),
+//                            Double.valueOf(detailedObjects.getString("popularity")),
+//                            detailedObjects.getString("backdrop_path"),
+//                            Double.valueOf(detailedObjects.getString("vote_count")),
+//                            detailedObjects.getString("release_date"),
+//                            Double.valueOf(detailedObjects.getString("vote_average")),
+//                            detailedObjects.getString("overview"),
+//                            Integer.valueOf(detailedObjects.getString("id"))
+//                    ));
+//                }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            CustomListAdapter adapter = new CustomListAdapter(
+//                    getApplicationContext(), R.id.movieListgrid, arrayList
+//            );
+//            theGridview.setAdapter(adapter);
+//        }
+//
+//    }
 
 
-    //comment004 this is the JSON that will parse the data
-    class ReadJSON extends AsyncTask<String, Integer, String>{
-
-
-
-        @Override
-        protected String doInBackground(String... params) {
-            return readsURL(params[0]);
-        }
-
-
-        @Override
-        protected void onPostExecute(String content) {
-
-            arrayList.clear();
-
-            try {
-                JSONObject jsonObject = new JSONObject(content);
-                JSONArray jsonArray = jsonObject.getJSONArray("results");
-                for (int i=0; i<jsonArray.length(); i++) {
-                    JSONObject detailedObjects = jsonArray.getJSONObject(i);
-                    arrayList.add(new MovieStat( detailedObjects.getString("title"),
-                            detailedObjects.getString("poster_path"),
-                            Double.valueOf(detailedObjects.getString("popularity")),
-                            detailedObjects.getString("backdrop_path"),
-                            Double.valueOf(detailedObjects.getString("vote_count")),
-                            detailedObjects.getString("release_date"),
-                            Double.valueOf(detailedObjects.getString("vote_average")),
-                            detailedObjects.getString("overview")
-                    ));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            CustomListAdapter adapter = new CustomListAdapter(
-                    getApplicationContext(), R.id.movieListgrid, arrayList
-            );
-            theGridview.setAdapter(adapter);
-        }
-
-    }
-
-
-
-    //comment005 this is the uri builder and the connection to the URL
+    //comment006 this is the uri builder and the connection to the URL
     private static String readsURL(String theUrl){
+
+
         StringBuilder content =  new StringBuilder();
 
         try {
@@ -181,3 +197,4 @@ public class MovieListActivity extends AppCompatActivity {
 
 
 }
+

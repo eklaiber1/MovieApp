@@ -66,10 +66,10 @@ public class CustomListAdapter extends ArrayAdapter<MovieStat> {
 //             txtName.setText(movieItems.getTitle());
 //
 //             TextView txtYear = (TextView) convertView.findViewById(R.id.movie_year);
-//             txtYear.setText(movieItems.getRelease_date());
+//             txtYear.setText(movieItems.getReleaseDate());
 //
 //             TextView txtRating = (TextView) convertView.findViewById(R.id.movie_rating);
-//             txtRating.setText(String.valueOf(movieItems.getVote_average()));
+//             txtRating.setText(String.valueOf(movieItems.getVoteAverage()));
 //
 //             TextView txtOverview = (TextView) convertView.findViewById(R.id.movie_overview);
 //             txtOverview.setText(movieItems.getOverview());
@@ -77,7 +77,7 @@ public class CustomListAdapter extends ArrayAdapter<MovieStat> {
 
 
             mviewholder.imageView = (ImageView) convertView.findViewById(R.id.item);
-            Picasso.with(context).load(pref+movieItems.getPoster_path()).into(mviewholder.imageView);
+            Picasso.with(context).load(pref+movieItems.getPosterPath()).into(mviewholder.imageView);
 
 
 

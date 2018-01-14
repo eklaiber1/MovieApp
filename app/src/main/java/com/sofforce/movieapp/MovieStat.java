@@ -16,34 +16,46 @@ public class MovieStat {
     private Double popularity;
 
     //this is the poster image of the movie
-    private String poster_path;
+    private String posterPath;
 
     //this is the poster backdrop
-    private String backdrop_path;
+    private String backdropPath;
 
     //this is the summary of the movie
     private String overview;
 
     //this is going to be for "top rated"
-    private Double vote_count;
+    private Double voteCount;
 
     //this is the release date
-    private  String release_date;
+    private  String releaseDate;
 
     //this is the vote average
-    private Double vote_average;
+    private Double voteAverage;
+
+    //this is the Id number of the movie
+    private int idNumber;
 
 
-    public MovieStat(String title, String poster_path, Double popularity, String backdrop_path, Double vote_count,  String release_date, Double vote_average, String overview) {
+    public MovieStat(String title,
+                        String posterPath,
+                            Double popularity,
+                                String backdropPath,
+                                    Double voteCount,
+                                        String releaseDate,
+                                            Double voteAverage,
+                                                String overview,
+                                                    int idNumber) {
 
         this.title = title;
-        this.poster_path = poster_path;
+        this.posterPath = posterPath;
         this.popularity = popularity;
-        this.backdrop_path = backdrop_path;
-        this.vote_count = vote_count;
-        this.release_date = release_date;
-        this.vote_average = vote_average;
+        this.backdropPath = backdropPath;
+        this.voteCount = voteCount;
+        this.releaseDate = releaseDate;
+        this.voteAverage = voteAverage;
         this.overview = overview;
+        this.idNumber = idNumber;
 
 
     }
@@ -56,6 +68,8 @@ public class MovieStat {
         this.title = title;
     }
 
+
+
     public Double getPopularity() {
         return popularity;
     }
@@ -64,28 +78,34 @@ public class MovieStat {
         this.popularity = popularity;
     }
 
-    public String getBackdrop_path() {
-        return backdrop_path;
+
+
+    public String getBackdropPath() {
+        return backdropPath;
     }
 
-    public void setBackdrop_path(String backdrop_path) {
-        this.backdrop_path = backdrop_path;
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
     }
 
-    public Double getVote_count() {
-        return vote_count;
+
+
+    public Double getVoteCount() {
+        return voteCount;
     }
 
-    public void setVote_count(Double vote_count) {
-        this.vote_count = vote_count;
+    public void setVoteCount(Double voteCount) {
+        this.voteCount = voteCount;
     }
 
-    public String getPoster_path() {
-        return poster_path;
+
+
+    public String getPosterPath() {
+        return posterPath;
     }
 
-    public void setPoster_path(String poster_path) {
-        this.poster_path = poster_path;
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
     }
 
 
@@ -100,23 +120,27 @@ public class MovieStat {
 
 
 
-    public String getRelease_date() {
-        return release_date;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setRelease_date(String release_date) {
-        this.release_date = release_date;
-    }
-
-
-
-    public Double getVote_average() {
-        return vote_average;
-    }
-
-    public void setVote_average(Double vote_average) {
-        this.vote_average = vote_average;
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
 
+
+    public Double getVoteAverage() {
+        return voteAverage;
+    }
+
+    public void setVoteAverage(Double voteAverage) {
+        this.voteAverage = voteAverage;
+    }
+
+
+
+    public int getIdNumber() { return idNumber;}
+
+    public void setIdNumber(int idNumber) { this.idNumber = idNumber;}
 }
