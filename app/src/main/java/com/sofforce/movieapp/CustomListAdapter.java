@@ -48,16 +48,16 @@ public class CustomListAdapter extends ArrayAdapter<MovieStat> {
 
         String pref ="http://image.tmdb.org/t/p/w500";
 
-        ViewHolder mviewholder = new ViewHolder();
+        ViewHolder mViewholder = new ViewHolder();
 
         try {
 
             if (convertView == null) {
                 LayoutInflater layoutInflater = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
                 convertView = layoutInflater.inflate(R.layout.item_view, parent, false);
-                convertView.setTag(mviewholder);
+                convertView.setTag(mViewholder);
             } else {
-                mviewholder = (ViewHolder) convertView.getTag();
+                mViewholder = (ViewHolder) convertView.getTag();
             }
 
             MovieStat movieItems = getItem(position);
@@ -76,8 +76,8 @@ public class CustomListAdapter extends ArrayAdapter<MovieStat> {
 
 
 
-            mviewholder.imageView = (ImageView) convertView.findViewById(R.id.item);
-            Picasso.with(context).load(pref+movieItems.getPosterPath()).into(mviewholder.imageView);
+            mViewholder.imageView = (ImageView) convertView.findViewById(R.id.item);
+            Picasso.with(context).load(pref+movieItems.getPosterPath()).into(mViewholder.imageView);
 
 
 
