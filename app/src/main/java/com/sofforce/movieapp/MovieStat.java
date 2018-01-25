@@ -1,10 +1,13 @@
 package com.sofforce.movieapp;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by mac on 12/18/17.
  */
 
-public class MovieStat {
+public class MovieStat implements Parcelable {
 
     //this class is going to be the MVC model viewer controller for the json object to parse
 
@@ -36,16 +39,20 @@ public class MovieStat {
     //this is the Id number of the movie
     private int idNumber;
 
+    //this is the Parcelable object needed for the procedure
+    private Parcelable mInfo;
+
+
 
     public MovieStat(String title,
-                        String posterPath,
-                            Double popularity,
-                                String backdropPath,
-                                    Double voteCount,
-                                        String releaseDate,
-                                            Double voteAverage,
-                                                String overview,
-                                                    int idNumber) {
+                     String posterPath,
+                     Double popularity,
+                     String backdropPath,
+                     Double voteCount,
+                     String releaseDate,
+                     Double voteAverage,
+                     String overview,
+                     int idNumber) {
 
         this.title = title;
         this.posterPath = posterPath;
@@ -59,6 +66,7 @@ public class MovieStat {
 
 
     }
+
 
     public String getTitle() {
         return title;
@@ -143,4 +151,66 @@ public class MovieStat {
     public int getIdNumber() { return idNumber;}
 
     public void setIdNumber(int idNumber) { this.idNumber = idNumber;}
+
+
+    // these are all the implementations for the interface Parcelable
+    // the override methods are all from the Parcelable class
+
+
+    // these values are the values that i want to be saved to the parcel
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeString(title);
+        parcel.writeString(posterPath);
+        parcel.writeDouble(popularity);
+        parcel.writeString(backdropPath);
+        parcel.writeDouble(voteCount);
+        parcel.writeString(releaseDate);
+        parcel.writeDouble(voteAverage);
+        parcel.writeString(overview);
+        parcel.writeInt(idNumber);
+        parcel.writeParcelable(mInfo, flags);
+
+    }
+
+    //Using in variable we can retrieve the values that we orginally wrote to the Parcel
+    private MovieStat(Parcel in) {
+        title =  in.readString();
+        posterPath = in.readString();
+        popularity = in.readDouble();
+        backdropPath = in.readString();
+        voteCount = in.readDouble();
+        releaseDate = in.readString();
+        voteAverage = in.readDouble();
+        overview = in.readString();
+        idNumber = in.readInt();
+        mInfo = in.readParcelable(Parcel.class.getClassLoader());
+    }
+
+
+    //Describe the kinds of special objects contained in this Parcelable instance's marshaled representation
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+
+    //the public CREATOR field generates instances of your Parcelable class from a Parcel.
+    public static final Parcelable.Creator<MovieStat> CREATOR
+            = new Parcelable.Creator<MovieStat>() {
+
+        //Create a new instance of the Parcelable class, instantiating it from the given Parcel
+        // whose data had previously been written by Parcelable.writeToParcel().
+        @Override
+        public MovieStat createFromParcel(Parcel in) {
+            return new MovieStat(in);
+        }
+
+        //Create a new array of the Parcelable class
+        @Override
+        public MovieStat[] newArray(int size) {
+            return new MovieStat[size];
+        }
+    };
+
 }

@@ -46,6 +46,8 @@ public class DetailedActivity extends AppCompatActivity {
          txtYear = (TextView) findViewById(R.id.movie_year);
          imageView = (ImageView) findViewById(R.id.grid_item_image);
 
+         //MovieStat object = (MovieStat) getIntent().getParcelableExtra("title");
+
         Bundle mbundle =  getIntent().getExtras();
         if (mbundle != null) {
             txtName.setText(mbundle.getString("title"));
@@ -61,6 +63,8 @@ public class DetailedActivity extends AppCompatActivity {
 
 
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

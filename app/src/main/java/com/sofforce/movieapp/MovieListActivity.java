@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,7 +21,7 @@ import java.util.ArrayList;
 public class MovieListActivity extends AppCompatActivity implements HelperAsync.AsyncTaskCallback {
 
     ArrayList<MovieStat> arrayList;
-    GridView theGridView = (GridView) findViewById(R.id.movieListgrid);
+    GridView theGridView;
     ConnectionDetector cd =  new ConnectionDetector(this);
 
     HelperAsync helperAsync = new HelperAsync();
@@ -36,6 +35,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_list);
+        theGridView = (GridView) findViewById(R.id.movieListgrid);
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
 
@@ -50,7 +50,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
                 }
         try {
 
-            loadData("http://api.themoviedb.org/3/movie/popular?api_key="+API_KEY);
+            loadData("http://api.themoviedb.org/3/movie/popular?api_key=");
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
@@ -88,7 +88,6 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
         helperAsync.execute(string + API_KEY);
 
-        Log.d("checkingExecution", this.helperAsync.execute().toString());
     }
 
 
@@ -117,7 +116,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
                 }
 
-                helperAsync.execute("http://api.themoviedb.org/3/movie/popular?api_key="+API_KEY);
+                this.loadData("http://api.themoviedb.org/3/movie/popular?api_key=");
 
                 return true;
 
@@ -130,7 +129,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
                 }
 
-                helperAsync.execute("http://api.themoviedb.org/3/movie/top_rated?api_key="+API_KEY);
+                this.loadData("http://api.themoviedb.org/3/movie/top_rated?api_key=");
 
                 return true;
         }
@@ -176,80 +175,6 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     public void onPreExecute() {
 
     }
-
-
-
-
-    //comment005 this is the JSON that will parse the data
-//    class ReadJSON extends AsyncTask<String, Integer, String>{
-//
-//
-//
-//        @Override
-//        protected String doInBackground(String... params) {
-//            return readsURL(params[0]);
-//        }
-//
-//
-//        @Override
-//        protected void onPostExecute(String content) {
-//
-//            arrayList.clear();
-//
-//            try {
-//                JSONObject jsonObject = new JSONObject(content);
-//                JSONArray jsonArray = jsonObject.getJSONArray("results");
-//                for (int i=0; i<jsonArray.length(); i++) {
-//                    JSONObject detailedObjects = jsonArray.getJSONObject(i);
-//                    arrayList.add(new MovieStat( detailedObjects.getString("title"),
-//                            detailedObjects.getString("poster_path"),
-//                            Double.valueOf(detailedObjects.getString("popularity")),
-//                            detailedObjects.getString("backdrop_path"),
-//                            Double.valueOf(detailedObjects.getString("vote_count")),
-//                            detailedObjects.getString("release_date"),
-//                            Double.valueOf(detailedObjects.getString("vote_average")),
-//                            detailedObjects.getString("overview"),
-//                            Integer.valueOf(detailedObjects.getString("id"))
-//                    ));
-//                }
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            CustomListAdapter adapter = new CustomListAdapter(
-//                    getApplicationContext(), R.id.movieListgrid, arrayList
-//            );
-//            theGridview.setAdapter(adapter);
-//        }
-//
-//    }
-
-
-    //comment006 this is the uri builder and the connection to the URL
-//    private static String readsURL(String theUrl){
-//
-//
-//        StringBuilder content =  new StringBuilder();
-//
-//        try {
-//            URL url  = new URL(theUrl);
-//            URLConnection urlConnection =  url.openConnection();
-//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-//            String line;
-//            while((line = bufferedReader.readLine()) !=null) {
-//                content.append(line + "\n");
-//            }
-//            bufferedReader.close();
-//        } catch(Exception e) {
-//            e.printStackTrace();
-//        }
-//         return content.toString();
-//
-//    }
-
-
-
-
-
 
 
 
