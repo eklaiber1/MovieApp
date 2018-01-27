@@ -177,14 +177,14 @@ public class MovieStat implements Parcelable {
     private MovieStat(Parcel in) {
         title =  in.readString();
         posterPath = in.readString();
-        popularity = in.readDouble();
+        popularity = in.readByte() == 0x00 ? null : in.readDouble();
         backdropPath = in.readString();
-        voteCount = in.readDouble();
+        voteCount = in.readByte() == 0x00 ? null : in.readDouble();
         releaseDate = in.readString();
-        voteAverage = in.readDouble();
+        voteAverage = in.readByte() == 0x00 ? null : in.readDouble();
         overview = in.readString();
         idNumber = in.readInt();
-        mInfo = in.readParcelable(Parcel.class.getClassLoader());
+        mInfo = (Parcelable) in.readValue(Parcelable.class.getClassLoader());
     }
 
 

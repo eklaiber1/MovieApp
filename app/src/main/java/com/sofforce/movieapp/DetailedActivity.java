@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.support.v7.widget.Toolbar;
 
 import com.squareup.picasso.Picasso;
 
@@ -46,20 +46,15 @@ public class DetailedActivity extends AppCompatActivity {
          txtYear = (TextView) findViewById(R.id.movie_year);
          imageView = (ImageView) findViewById(R.id.grid_item_image);
 
-         //MovieStat object = (MovieStat) getIntent().getParcelableExtra("title");
-
-        Bundle mbundle =  getIntent().getExtras();
-        if (mbundle != null) {
-            txtName.setText(mbundle.getString("title"));
-            txtRating.setText(mbundle.getString("vote_average"));
-            txtOverview.setText(mbundle.getString("overview"));
-            txtYear.setText(mbundle.getString("release_date"));
-            String url = mbundle.getString("poster_path");
+        MovieStat object = (MovieStat) getIntent().getParcelableExtra("parcel");
+//          Bundle mbundle =  getIntent().getExtras();
+            txtName.setText(object.getTitle());
+            txtRating.setText(object.getVoteCount().toString());
+            txtOverview.setText(object.getOverview());
+            txtYear.setText(object.getReleaseDate());
+            String url = object.getPosterPath();
             Picasso.with(this).load(pref+url).into(imageView);
 
-
-
-        }
 
 
     }

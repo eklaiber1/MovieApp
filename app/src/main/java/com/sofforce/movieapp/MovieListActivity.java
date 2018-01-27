@@ -65,12 +65,14 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
                 MovieStat movie = arrayList.get(i);
 
                 Intent mIntent =  new Intent(MovieListActivity.this, DetailedActivity.class);
-                mIntent.putExtra("title", movie.getTitle());
-                mIntent.putExtra("release_date", movie.getReleaseDate());
-                mIntent.putExtra("vote_average", String.valueOf(movie.getVoteAverage()));
-                mIntent.putExtra("overview", movie.getOverview());
-                mIntent.putExtra("poster_path", movie.getPosterPath());
-                mIntent.putExtra("id", String.valueOf(movie.getIdNumber()));
+//                mIntent.putExtra("title", movie);
+//                mIntent.putExtra("release_date", String.valueOf(movie));
+//                mIntent.putExtra("vote_average", movie);
+//                mIntent.putExtra("overview", movie);
+//                mIntent.putExtra("poster_path", movie);
+//                mIntent.putExtra("id", movie);
+
+                  mIntent.putExtra("parcel",movie);
 
                 startActivity(mIntent);
 
