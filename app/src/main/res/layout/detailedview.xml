@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".DetailedActivity">
+
+
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbarAlwaysDrawHorizontalTrack="false"
+    android:scrollbarAlwaysDrawVerticalTrack="false"
     tools:context="com.sofforce.movieapp.DetailedActivity">
 
     <include
-        layout="@layout/customtoolbar_main"
-        android:id="@+id/tool_bar"/>
+        android:id="@+id/tool_bar"
+        layout="@layout/customtoolbar_main" />
 
     <TextView
         android:id="@+id/marquee_title"
@@ -102,3 +114,4 @@
         app:layout_constraintTop_toBottomOf="@+id/marquee_title" />
 
 </android.support.constraint.ConstraintLayout>
+</ScrollView>
