@@ -49,7 +49,7 @@ public class DetailedActivity extends AppCompatActivity {
         MovieStat object = (MovieStat) getIntent().getParcelableExtra("parcel");
 //          Bundle mbundle =  getIntent().getExtras();
             txtName.setText(object.getTitle());
-            txtRating.setText(object.getVoteCount().toString());
+            txtRating.setText(object.getVoteAverage().toString());
             txtOverview.setText(object.getOverview());
             txtYear.setText(object.getReleaseDate());
             String url = object.getPosterPath();

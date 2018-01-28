@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+
 public class MovieListActivity extends AppCompatActivity implements HelperAsync.AsyncTaskCallback {
 
     ArrayList<MovieStat> arrayList;
@@ -72,7 +73,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 //                mIntent.putExtra("poster_path", movie);
 //                mIntent.putExtra("id", movie);
 
-                  mIntent.putExtra("parcel",movie);
+                  mIntent.putExtra("parcel", movie);
 
                 startActivity(mIntent);
 

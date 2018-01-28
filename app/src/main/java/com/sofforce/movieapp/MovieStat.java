@@ -7,6 +7,7 @@ import android.os.Parcelable;
  * Created by mac on 12/18/17.
  */
 
+
 public class MovieStat implements Parcelable {
 
     //this class is going to be the MVC model viewer controller for the json object to parse
@@ -65,6 +66,20 @@ public class MovieStat implements Parcelable {
         this.idNumber = idNumber;
 
 
+    }
+
+    //Using in variable we can retrieve the values that we orginally wrote to the Parcel
+    protected MovieStat(Parcel in) {
+        title = in.readString();
+        popularity = in.readByte() == 0x00 ? null : in.readDouble();
+        posterPath = in.readString();
+        backdropPath = in.readString();
+        overview = in.readString();
+        voteCount = in.readByte() == 0x00 ? null : in.readDouble();
+        releaseDate = in.readString();
+        voteAverage = in.readByte() == 0x00 ? null : in.readDouble();
+        idNumber = in.readInt();
+        mInfo = (Parcelable) in.readValue(Parcelable.class.getClassLoader());
     }
 
 
@@ -153,38 +168,17 @@ public class MovieStat implements Parcelable {
     public void setIdNumber(int idNumber) { this.idNumber = idNumber;}
 
 
-    // these are all the implementations for the interface Parcelable
-    // the override methods are all from the Parcelable class
-
-
-    // these values are the values that i want to be saved to the parcel
-    @Override
-    public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeString(title);
-        parcel.writeString(posterPath);
-        parcel.writeDouble(popularity);
-        parcel.writeString(backdropPath);
-        parcel.writeDouble(voteCount);
-        parcel.writeString(releaseDate);
-        parcel.writeDouble(voteAverage);
-        parcel.writeString(overview);
-        parcel.writeInt(idNumber);
-        parcel.writeParcelable(mInfo, flags);
-
+    //this is the new added info
+    public Parcelable getmInfo() {
+        return mInfo;
     }
 
-    //Using in variable we can retrieve the values that we orginally wrote to the Parcel
-    private MovieStat(Parcel in) {
-        title =  in.readString();
-        posterPath = in.readString();
-        popularity = in.readByte() == 0x00 ? null : in.readDouble();
-        backdropPath = in.readString();
-        voteCount = in.readByte() == 0x00 ? null : in.readDouble();
-        releaseDate = in.readString();
-        voteAverage = in.readByte() == 0x00 ? null : in.readDouble();
-        overview = in.readString();
-        idNumber = in.readInt();
-        mInfo = (Parcelable) in.readValue(Parcelable.class.getClassLoader());
+    public void setmInfo(Parcelable mInfo) {
+        this.mInfo = mInfo;
+    }
+
+    public static Creator<MovieStat> getCREATOR() {
+        return CREATOR;
     }
 
 
@@ -195,7 +189,50 @@ public class MovieStat implements Parcelable {
     }
 
 
+
+    // these are all the implementations for the interface Parcelable
+    // the override methods are all from the Parcelable class
+
+
+    // these values are the values that i want to be saved to the parcel
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(title);
+        if (popularity == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(popularity);
+        }
+        dest.writeString(posterPath);
+        dest.writeString(backdropPath);
+        dest.writeString(overview);
+        if (voteCount == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(voteCount);
+        }
+        dest.writeString(releaseDate);
+        if (voteAverage == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeDouble(voteAverage);
+        }
+        dest.writeInt(idNumber);
+        dest.writeValue(mInfo);
+
+    }
+
+
+    //Describe the kinds of special objects contained in this Parcelable instance's marshaled representation
+
+
+
     //the public CREATOR field generates instances of your Parcelable class from a Parcel.
+    @SuppressWarnings("unused")
     public static final Parcelable.Creator<MovieStat> CREATOR
             = new Parcelable.Creator<MovieStat>() {
 
@@ -212,5 +249,6 @@ public class MovieStat implements Parcelable {
             return new MovieStat[size];
         }
     };
+
 
 }
