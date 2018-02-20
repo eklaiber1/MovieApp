@@ -1,9 +1,14 @@
 package com.sofforce.movieapp;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.sofforce.movieapp.datafavorites.MovieContract;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,13 +26,20 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class MovieListActivity extends AppCompatActivity implements HelperAsync.AsyncTaskCallback {
+public class MovieListActivity extends AppCompatActivity implements HelperAsync.AsyncTaskCallback,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     ArrayList<MovieStat> arrayList;
     GridView theGridView;
     ConnectionDetector cd =  new ConnectionDetector(this);
 
     HelperAsync helperAsync = new HelperAsync();
+    private static final String TAG = MovieListActivity.class.getSimpleName();
+
+    private static final int TASK_LOADER_ID = 0;
+
+    // private CustomCursorAdapter mAdapter;
+
 
     private static final String API_KEY = BuildConfig.API_KEY;
 
@@ -135,6 +149,15 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
                 this.loadData("http://api.themoviedb.org/3/movie/top_rated?api_key=");
 
                 return true;
+
+            case R.id.action_favorites:
+
+                /*
+                * when a user clicks this item in the menu it will load all the
+                * favorites that the clicked on in the detailed view of the movie thumbnail*/
+                //this.loadData();
+
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -179,7 +202,63 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // re-queries for all tasks
+        getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, this);
+    }
+
+    //these are all the methods to be overwritten by the implemented interface
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new AsyncTaskLoader<Cursor>(this) {
+
+            Cursor mTaskData = null;
+
+            @Override
+            protected void onStartLoading() {
+                if (mTaskData != null) {
+                    deliverResult(mTaskData);
+                } else {
+                    forceLoad();
+                }
+            }
+
+            @Override
+            public Cursor loadInBackground() {
 
 
+                try {
+                    return getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+                            null,
+                            null,
+                            null,
+                            null);
+
+                } catch (Exception e) {
+                    Log.e(TAG, "Failed to asynchronously load data.");
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            public void deliverResult(Cursor data) {
+                mTaskData = data;
+                super.deliverResult(data);
+            }
+        };
+
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+    }
 }
 

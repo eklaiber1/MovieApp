@@ -7,16 +7,19 @@
         android:id="@+id/action_mostPopular"
         android:title="@string/mpop"
         app:showAsAction="never">
-
     </item>
 
     <item
         android:id="@+id/action_toprated"
         android:title="@string/trated"
         app:showAsAction="never">
-
     </item>
 
+    <item
+        android:id="@+id/action_favorites"
+        android:title="@string/favorites"
+        app:showAsAction="never">
+    </item>
 
 
 </menu>
