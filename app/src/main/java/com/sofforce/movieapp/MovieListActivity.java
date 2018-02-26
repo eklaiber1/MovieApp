@@ -2,6 +2,7 @@ package com.sofforce.movieapp;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -17,13 +18,15 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.sofforce.movieapp.datafavorites.MovieContract;
+import com.sofforce.movieapp.datafavorites.MovieDbHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import static com.sofforce.movieapp.datafavorites.MovieContract.MovieEntry;
 
 
 public class MovieListActivity extends AppCompatActivity implements HelperAsync.AsyncTaskCallback,
@@ -32,6 +35,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     ArrayList<MovieStat> arrayList;
     GridView theGridView;
     ConnectionDetector cd =  new ConnectionDetector(this);
+    private MovieDbHelper mMovieDbhelper;
 
     HelperAsync helperAsync = new HelperAsync();
     private static final String TAG = MovieListActivity.class.getSimpleName();
@@ -108,6 +112,12 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     }
 
 
+    private void loadFavorites() {
+        // re-queries for all tasks
+        getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, this);
+    }
+
+
     //comment003 this is to inflate the menu on the actionbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -155,8 +165,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
                 /*
                 * when a user clicks this item in the menu it will load all the
                 * favorites that the clicked on in the detailed view of the movie thumbnail*/
-                //this.loadData();
-
+                loadFavorites();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -191,11 +200,20 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            CustomListAdapter adapter = new CustomListAdapter(
-                    getApplicationContext(), R.id.movieListgrid, arrayList
-            );
-            theGridView.setAdapter(adapter);
+            setAdapter(arrayList);
     }
+
+    private void setAdapter(ArrayList<MovieStat> movieStats) {
+        CustomListAdapter adapter = new CustomListAdapter(
+                getApplicationContext(), R.id.movieListgrid, movieStats
+        );
+        theGridView.setAdapter(adapter);
+    }
+
+
+
+
+
 
     @Override
     public void onPreExecute() {
@@ -231,7 +249,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
 
                 try {
-                    return getContentResolver().query(MovieContract.MovieEntry.CONTENT_URI,
+                    return getContentResolver().query(MovieEntry.CONTENT_URI,
                             null,
                             null,
                             null,
@@ -242,6 +260,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
                     e.printStackTrace();
                     return null;
                 }
+
             }
 
             public void deliverResult(Cursor data) {
@@ -254,7 +273,30 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        // Note :  here i am testing count of favorites movies
+        Log.d("TEST","data "+data.getCount());
 
+        // here cursor data contains list of favorites movies in database
+        // so
+        // 1 - fetch data from data object
+        // 2 - call setAdapter with list of data fetched here
+        ArrayList<String> posterArray = new ArrayList<>();
+        SQLiteDatabase mDb = mMovieDbhelper.getReadableDatabase();
+        data = mDb.query(MovieEntry.TABLE_NAME, new String[]{MovieEntry.COLUMN_MOVIE_POSTER},
+                        null,
+                        null,
+                        null,
+                        null,
+                        null );
+        if (data.moveToFirst()) {
+            do {
+                posterArray.add(data.getString(data.getString(data.getColumnIndex(MovieEntry.COLUMN_MOVIE_POSTER))));
+            } while(data.moveToNext());
+
+        }
+
+        setAdapter(posterArray);
+        data.close();
     }
 
     @Override

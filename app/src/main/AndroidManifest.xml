@@ -31,11 +31,10 @@
                 android:value=".MovieListActivity" />
         </activity>
         <activity android:name=".CustomListAdapter" />
-        <activity android:name=".datafavorites.favorites" />
 
         <provider
             android:name="com.sofforce.movieapp.datafavorites.MovieContentProvider"
-            android:authorities="com.sofforce.MovieApp"
+            android:authorities="com.sofforce.movieApp"
             android:exported="false"/>
     </application>
 

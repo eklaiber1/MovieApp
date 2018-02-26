@@ -9,11 +9,14 @@ import android.provider.BaseColumns;
 
 public class MovieContract  {
 
-    public static final String AUTHORITY = "com.sofforce.movieapp";
+    public static final String AUTHORITY = "com.sofforce.movieApp";
 
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + AUTHORITY);
 
     public static final String PATH_MOVIES = "favoriteMovies";
+
+
+
 
     //the inner class that defines the contents of the task table
     public static final class MovieEntry implements BaseColumns {

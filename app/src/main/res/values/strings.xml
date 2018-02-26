@@ -3,5 +3,6 @@
     <string name="mpop">Most Popular</string>
     <string name="trated">Top Rated</string>
     <string name="details">DetailedView</string>
-    <string name="favorites">Add Favorite</string>
+    <string name="favorites">Favorites</string>
+    <string name="addFavorite">Add Favorite</string>
 </resources>

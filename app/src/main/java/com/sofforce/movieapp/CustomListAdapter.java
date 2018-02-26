@@ -33,10 +33,6 @@ public class CustomListAdapter extends ArrayAdapter<MovieStat> {
     static class ViewHolder {
 
         ImageView imageView;
-//        TextView txtName;
-//        TextView txtYear;
-//        TextView txtRating;
-//        TextView txtOverview;
 
     }
 
@@ -62,20 +58,6 @@ public class CustomListAdapter extends ArrayAdapter<MovieStat> {
 
             MovieStat movieItems = getItem(position);
 
-//             TextView txtName = (TextView) convertView.findViewById(R.id.marquee_title);
-//             txtName.setText(movieItems.getTitle());
-//
-//             TextView txtYear = (TextView) convertView.findViewById(R.id.movie_year);
-//             txtYear.setText(movieItems.getReleaseDate());
-//
-//             TextView txtRating = (TextView) convertView.findViewById(R.id.movie_rating);
-//             txtRating.setText(String.valueOf(movieItems.getVoteAverage()));
-//
-//             TextView txtOverview = (TextView) convertView.findViewById(R.id.movie_overview);
-//             txtOverview.setText(movieItems.getOverview());
-
-
-
             mViewholder.imageView = (ImageView) convertView.findViewById(R.id.item);
             Picasso.with(context).load(pref+movieItems.getPosterPath()).into(mViewholder.imageView);
 
@@ -95,5 +77,8 @@ public class CustomListAdapter extends ArrayAdapter<MovieStat> {
         return moviepics != null?
                moviepics.size():0;
     }
+
+
+
 
 }

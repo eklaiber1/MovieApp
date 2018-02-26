@@ -84,8 +84,12 @@ public class DetailedActivity extends AppCompatActivity {
             step 3: pass that information to be stored in the MovieDbHelper database
             step 4: finish the activity(this returns back to the mainActivity)
        * */
-       String inputPosterImage =  pref + url;
-       String inputMovieName =   txtName.getText().toString();
+       String inputPosterImage = ((ImageView) findViewById(R.id.grid_item_image)).getContext().toString();
+       String inputMovieName = ((TextView) findViewById(R.id.marquee_title)).getText().toString();
+
+        if (inputPosterImage.length() == 0 && inputMovieName.length() == 0) {
+            return;
+        }
 
         ContentValues contentValues =  new ContentValues();
 
