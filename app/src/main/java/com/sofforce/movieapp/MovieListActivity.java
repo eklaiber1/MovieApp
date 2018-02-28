@@ -35,7 +35,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     ArrayList<MovieStat> arrayList;
     GridView theGridView;
     ConnectionDetector cd =  new ConnectionDetector(this);
-    private MovieDbHelper mMovieDbhelper;
+    MovieDbHelper mMovieDbHelper;
 
     HelperAsync helperAsync = new HelperAsync();
     private static final String TAG = MovieListActivity.class.getSimpleName();
@@ -54,9 +54,11 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_list);
+
         theGridView = (GridView) findViewById(R.id.movieListgrid);
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
+        mMovieDbHelper = new MovieDbHelper (this);
 
         arrayList = new ArrayList<>();
 
@@ -84,12 +86,6 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
                 MovieStat movie = arrayList.get(i);
 
                 Intent mIntent =  new Intent(MovieListActivity.this, DetailedActivity.class);
-//                mIntent.putExtra("title", movie);
-//                mIntent.putExtra("release_date", String.valueOf(movie));
-//                mIntent.putExtra("vote_average", movie);
-//                mIntent.putExtra("overview", movie);
-//                mIntent.putExtra("poster_path", movie);
-//                mIntent.putExtra("id", movie);
 
                   mIntent.putExtra("parcel", movie);
 
@@ -274,28 +270,38 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         // Note :  here i am testing count of favorites movies
-        Log.d("TEST","data "+data.getCount());
+        Log.d( "TEST", "data " + data.getCount() );
 
         // here cursor data contains list of favorites movies in database
         // so
         // 1 - fetch data from data object
         // 2 - call setAdapter with list of data fetched here
-        ArrayList<String> posterArray = new ArrayList<>();
-        SQLiteDatabase mDb = mMovieDbhelper.getReadableDatabase();
-        data = mDb.query(MovieEntry.TABLE_NAME, new String[]{MovieEntry.COLUMN_MOVIE_POSTER},
-                        null,
-                        null,
-                        null,
-                        null,
-                        null );
+
+
+        ArrayList<MovieStat> posterArray = new ArrayList<>();
+        SQLiteDatabase mDb = mMovieDbHelper.getReadableDatabase();
+        data = mDb.query( MovieEntry.TABLE_NAME, new String[]{MovieEntry.COLUMN_MOVIE_POSTER},
+                null,
+                null,
+                null,
+                null,
+                null );
         if (data.moveToFirst()) {
             do {
-                posterArray.add(data.getString(data.getString(data.getColumnIndex(MovieEntry.COLUMN_MOVIE_POSTER))));
-            } while(data.moveToNext());
+                posterArray.add( new MovieStat( "",
+                        data.getString( data.getColumnIndex( MovieEntry.COLUMN_MOVIE_POSTER ) ),
+                        0.0,
+                        "",
+                        0.0,
+                        "",
+                        0.0,
+                        "",
+                        data.getInt( data.getInt( data.getColumnIndex( MovieEntry._ID ) ) ) ) );
+            } while (data.moveToNext());
 
         }
 
-        setAdapter(posterArray);
+        setAdapter( posterArray );
         data.close();
     }
 

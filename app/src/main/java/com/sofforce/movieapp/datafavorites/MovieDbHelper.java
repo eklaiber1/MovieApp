@@ -18,8 +18,9 @@ public class MovieDbHelper extends SQLiteOpenHelper {
     private static final int VERSION =  1;
 
     //the constructor
-    MovieDbHelper(Context context) {
-        super(context, DATABASE_NAME, null, VERSION);
+   public MovieDbHelper(Context context) {
+
+       super(context, DATABASE_NAME, null, VERSION);
     }
 
     @Override
@@ -39,6 +40,8 @@ public class MovieDbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-
-
+    @Override
+    public SQLiteDatabase getReadableDatabase() {
+        return super.getReadableDatabase();
+    }
 }
