@@ -82,6 +82,7 @@ public class MovieContentProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
+
         return null;
     }
 
@@ -97,7 +98,15 @@ public class MovieContentProvider extends ContentProvider {
         switch (match) {
             case MOVIES:
 
-                long id =  db.insert(TABLE_NAME, null, contentValues);
+                long id =  -1;
+
+                try{
+                    id = db.insert(TABLE_NAME, null, contentValues);
+
+                } catch (Exception e ) {
+
+                }
+
                 if (id > 0) {
                     returnUri = ContentUris.withAppendedId(MovieContract.MovieEntry.CONTENT_URI, id);
                 } else {

@@ -42,9 +42,6 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
     private static final int TASK_LOADER_ID = 0;
 
-    // private CustomCursorAdapter mAdapter;
-
-
     private static final String API_KEY = BuildConfig.API_KEY;
 
 
@@ -60,7 +57,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
         setSupportActionBar(toolbar);
         mMovieDbHelper = new MovieDbHelper (this);
 
-        arrayList = new ArrayList<>();
+         arrayList = new ArrayList<>();
 
 
         if (cd.isConnected()) {
@@ -96,11 +93,10 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
     }
 
-    private void loadData(String string){
+    public void loadData(String string){
 
         HelperAsync helperAsync = new HelperAsync();
         // here `this` refers to the container class. Hence your Activity/Fragment needs to implement its methods.
-        // So press alt+enter and choose `Make Activity implement methods`
         helperAsync.setAsyncTaskCallback(this);
 
         helperAsync.execute(string + API_KEY);
@@ -160,7 +156,8 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
                 /*
                 * when a user clicks this item in the menu it will load all the
-                * favorites that the clicked on in the detailed view of the movie thumbnail*/
+                * favorites that the clicked on in the detailed view of the movie thumbnail
+                * */
                 loadFavorites();
                 return true;
         }
@@ -175,7 +172,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     @Override
     public void onPostExecute(String s) {
 
-            arrayList.clear();
+        arrayList.clear();
 
             try {
                 JSONObject jsonObject = new JSONObject(s);
@@ -216,13 +213,13 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // re-queries for all tasks
-        getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, this);
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//        // re-queries for all tasks
+//        getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, this);
+//    }
 
     //these are all the methods to be overwritten by the implemented interface
     @Override
@@ -269,18 +266,11 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        // Note :  here i am testing count of favorites movies
         Log.d( "TEST", "data " + data.getCount() );
-
-        // here cursor data contains list of favorites movies in database
-        // so
-        // 1 - fetch data from data object
-        // 2 - call setAdapter with list of data fetched here
-
 
         ArrayList<MovieStat> posterArray = new ArrayList<>();
         SQLiteDatabase mDb = mMovieDbHelper.getReadableDatabase();
-        data = mDb.query( MovieEntry.TABLE_NAME, new String[]{MovieEntry.COLUMN_MOVIE_POSTER},
+        data = mDb.query( MovieEntry.TABLE_NAME, new String[]{MovieEntry.COLUMN_MOVIE_POSTER, MovieEntry._ID, MovieEntry.COLUMN_MOVIE_NAME},
                 null,
                 null,
                 null,
@@ -288,7 +278,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
                 null );
         if (data.moveToFirst()) {
             do {
-                posterArray.add( new MovieStat( "",
+                posterArray.add( new MovieStat( data.getString( data.getColumnIndex( MovieEntry.COLUMN_MOVIE_NAME )),
                         data.getString( data.getColumnIndex( MovieEntry.COLUMN_MOVIE_POSTER ) ),
                         0.0,
                         "",
@@ -296,7 +286,9 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
                         "",
                         0.0,
                         "",
-                        data.getInt( data.getInt( data.getColumnIndex( MovieEntry._ID ) ) ) ) );
+                        data.getInt( data.getColumnIndex( MovieEntry._ID ) ) ) );
+                Log.d( "ARRAYCHECK", "movie poster " + data.getString(data.getColumnIndex( MovieEntry.COLUMN_MOVIE_POSTER )) );
+
             } while (data.moveToNext());
 
         }
