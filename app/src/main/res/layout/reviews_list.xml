@@ -7,11 +7,15 @@
     <TextView
         android:id="@+id/theAuthor"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/randomColor"
+        android:textColor="@color/textcolor"/>
 
     <TextView
         android:id="@+id/theContent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/textcolor"/>
 
 </LinearLayout>

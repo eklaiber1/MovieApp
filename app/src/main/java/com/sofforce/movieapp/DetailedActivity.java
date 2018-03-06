@@ -71,6 +71,8 @@ public class DetailedActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = this.getSupportActionBar();
 
+        reviewsArrayList =  new ArrayList<>();
+
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
@@ -104,10 +106,8 @@ public class DetailedActivity extends AppCompatActivity {
 
 
 
-        //this is the call to the reviews and the videos
+        //this is the url string for the reviews.
         String newUrl = "http://api.themoviedb.org/3/movie/" + movieId + "/reviews?api_key=";
-        MovieListActivity movieListActivity = new MovieListActivity();
-        movieListActivity.loadData(newUrl);
 
 
        // MovieReviews object2 =  (MovieReviews) getParcelable("parcel");

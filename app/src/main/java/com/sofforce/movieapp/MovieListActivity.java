@@ -32,7 +32,7 @@ import static com.sofforce.movieapp.datafavorites.MovieContract.MovieEntry;
 public class MovieListActivity extends AppCompatActivity implements HelperAsync.AsyncTaskCallback,
         LoaderManager.LoaderCallbacks<Cursor> {
 
-    ArrayList<MovieStat> arrayList;
+    public ArrayList<MovieStat> arrayList;
     GridView theGridView;
     ConnectionDetector cd =  new ConnectionDetector(this);
     MovieDbHelper mMovieDbHelper;
