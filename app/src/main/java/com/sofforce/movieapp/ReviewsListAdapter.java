@@ -31,8 +31,8 @@ public class ReviewsListAdapter extends ArrayAdapter<MovieReviews> {
 
     static class ViewHolder {
 
-        TextView textView;
-
+        TextView textAuthor;
+        TextView textContent;
     }
 
 
@@ -54,8 +54,11 @@ public class ReviewsListAdapter extends ArrayAdapter<MovieReviews> {
 
             MovieReviews movieRev = getItem(position);
 
-            mViewHolder.textView =  (TextView) convertView.findViewById(R.id.theAuthor );
-            mViewHolder.textView =  (TextView) convertView.findViewById( R.id.theContent );
+            mViewHolder.textAuthor =  (TextView) convertView.findViewById(R.id.theAuthor );
+            mViewHolder.textContent =  (TextView) convertView.findViewById( R.id.theContent );
+
+            mViewHolder.textAuthor.setText( movieRev.getAuthor() );
+            mViewHolder.textContent.setText( movieRev.getContent() );
 
 
 

@@ -33,9 +33,11 @@
         <activity android:name=".CustomListAdapter" />
 
         <provider
-            android:name="com.sofforce.movieapp.datafavorites.MovieContentProvider"
+            android:name=".datafavorites.MovieContentProvider"
             android:authorities="com.sofforce.movieApp"
-            android:exported="false"/>
+            android:exported="false" />
+
+        <activity android:name=".PlayTrailerVideo"></activity>
     </application>
 
 </manifest>

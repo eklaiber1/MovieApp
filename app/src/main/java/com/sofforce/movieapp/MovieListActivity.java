@@ -91,6 +91,16 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
             }
         });
 
+//        theGridView.setOnClickListener( new OnDoubleTapListener() {
+//
+//            @Override
+//            public boolean onDoubleTap(MotionEvent motionEvent) {
+//                return false;
+//            }
+//
+//
+//        });
+
     }
 
     public void loadData(String string){
@@ -117,6 +127,11 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    //this is the toast message method that will handle about any message if it is emplemented
+    private void toastMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
 

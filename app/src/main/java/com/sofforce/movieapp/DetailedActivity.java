@@ -1,6 +1,7 @@
 package com.sofforce.movieapp;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -49,6 +51,8 @@ public class DetailedActivity extends AppCompatActivity {
     ListView videos;
 
     ArrayList<MovieReviews> reviewsArrayList;
+    ArrayList<MovieVideos> videosArrayList;
+
 
 
     String pref ="http://image.tmdb.org/t/p/w342";
@@ -72,6 +76,8 @@ public class DetailedActivity extends AppCompatActivity {
         ActionBar actionBar = this.getSupportActionBar();
 
         reviewsArrayList =  new ArrayList<>();
+        videosArrayList =  new ArrayList<>();
+
 
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
@@ -107,12 +113,38 @@ public class DetailedActivity extends AppCompatActivity {
 
 
         //this is the url string for the reviews.
-        String newUrl = "http://api.themoviedb.org/3/movie/" + movieId + "/reviews?api_key=";
+        String reviewsUrl = "http://api.themoviedb.org/3/movie/" + movieId + "/reviews?api_key=";
+        //this is the url string for the videos
+        String videosUrl = "http://api.themoviedb.org/3/movie/" + movieId + "/videos?api_key=";
 
 
-       // MovieReviews object2 =  (MovieReviews) getParcelable("parcel");
+
+        // MovieReviews object2 =  (MovieReviews) getParcelable("parcel");
         ReviewsAsync reviewsAsync = new ReviewsAsync();
-        reviewsAsync.execute(newUrl+API_KEY);
+        reviewsAsync.execute(reviewsUrl+API_KEY);
+
+        VideosAsync videosAsync =  new VideosAsync();
+        videosAsync.execute( videosUrl+API_KEY );
+
+        //when the movie thumbnail gets clicked it will pass the Key from the MovieVideo class
+        //that will when be passed to an intent to another activity that will load the url
+        //and play the trailer for the movie
+        videos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                MovieVideos movieVideos =  videosArrayList.get(i);
+                Intent intent = new Intent(DetailedActivity.this, PlayTrailerVideo.class );
+                intent.putExtra( "parcel", movieVideos.getKey());
+                startActivity( intent );
+
+
+                Log.d( "VIDEO_KEY", "this is the video Key____________________________: " + movieVideos.getKey() );
+
+            }
+
+        });
     }
 
     //this is the addFavorite() for the favorite button
@@ -155,25 +187,25 @@ public class DetailedActivity extends AppCompatActivity {
     }
 
 
-    //this is to retrieve the reviews
+    //this class is to retrieve the reviews
     public class ReviewsAsync extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... params) {
 
 
-            StringBuilder content =  new StringBuilder();
+            StringBuilder content = new StringBuilder();
 
             try {
-                URL url  = new URL(params[0]);
-                URLConnection urlConnection =  url.openConnection();
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                URL url = new URL( params[0] );
+                URLConnection urlConnection = url.openConnection();
+                BufferedReader bufferedReader = new BufferedReader( new InputStreamReader( urlConnection.getInputStream() ) );
                 String line;
-                while((line = bufferedReader.readLine()) !=null) {
-                    content.append(line + "\n");
+                while ((line = bufferedReader.readLine()) != null) {
+                    content.append( line + "\n" );
                 }
                 bufferedReader.close();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return content.toString();
@@ -206,6 +238,14 @@ public class DetailedActivity extends AppCompatActivity {
             setAdapter( reviewsArrayList );
         }
 
+        @Override
+        public void onPreExecute() {
+
+        }
+
+    }
+
+
         private void setAdapter(ArrayList<MovieReviews> movieReviews) {
             ReviewsListAdapter adapter = new ReviewsListAdapter(
                     getApplicationContext(), R.id.reviewsList, movieReviews
@@ -213,10 +253,77 @@ public class DetailedActivity extends AppCompatActivity {
             reviews.setAdapter( adapter );
         }
 
-        @Override
-        public void onPreExecute() {
 
-        }
+
+
+
+
+        //this class is for retrieving displaying the videos in the detailedView
+    public class VideosAsync extends AsyncTask<String, String, String> {
+
+
+            @Override
+            protected String doInBackground(String... params) {
+
+
+                StringBuilder content = new StringBuilder();
+
+                try {
+                    URL url = new URL( params[0] );
+                    URLConnection urlConnection = url.openConnection();
+                    BufferedReader bufferedReader = new BufferedReader( new InputStreamReader( urlConnection.getInputStream() ) );
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        content.append( line + "\n" );
+                    }
+                    bufferedReader.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return content.toString();
+            }
+            @Override
+            public void onPostExecute(String s) {
+
+                videosArrayList.clear();
+
+                try {
+                    JSONObject jsonObject = new JSONObject( s );
+                    JSONArray jsonArray = jsonObject.getJSONArray( "results" );
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject detailedObjects = jsonArray.getJSONObject( i );
+                        videosArrayList.add( new MovieVideos( detailedObjects.getString( "id" ),
+                                detailedObjects.getString( "key" ),
+                                detailedObjects.getString( "name" )
+                        ) );
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                setAdapter2( videosArrayList );
+            }
+
 
     }
+
+
+    private void setAdapter2(ArrayList<MovieVideos> movieVideos) {
+        VideosListAdapter adapter = new VideosListAdapter(
+                getApplicationContext(), R.id.videosList, movieVideos
+        );
+        videos.setAdapter( adapter );
+    }
+
+    //when the movie thumbnail gets clicked it will pass the Key from the MovieVideo class
+    //that will when be passed to an intent to another activity that will load the url
+    //and play the trailer for the movie
+
+
+
+
+
+    //| -- authority  --     | --   query   --   |
+    // http://www.youtube.com/watch?v=hFS9MrlJMXw
+
+    //http://i.ytimg.com/vi/59ca73b7c3a36803c700bab9/hqdefault.jpg
 }

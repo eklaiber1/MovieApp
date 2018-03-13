@@ -1,7 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<VideoView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/videos"
-    android:layout_width="match_parent"
-    android:layout_height="60dp">
 
-</VideoView>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/videos"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="2dp">
+
+    </ImageView>
+
+    <TextView
+        android:id="@+id/nameOfVideo"
+        android:layout_width="311dp"
+        android:layout_height="wrap_content"
+        android:padding="2dp"
+        android:textColor="@color/textcolor"
+        android:textStyle="italic"
+        android:layout_gravity="left"/>
+</FrameLayout>

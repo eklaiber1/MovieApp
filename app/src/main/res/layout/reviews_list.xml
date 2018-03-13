@@ -9,12 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/randomColor"
-        android:textColor="@color/textcolor"/>
+        android:padding="5dp"
+        android:textColor="@color/textcolor"
+        android:textStyle="italic" />
 
     <TextView
         android:id="@+id/theContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="5dp"
         android:background="@color/colorPrimaryDark"
         android:textColor="@color/textcolor"/>
 
