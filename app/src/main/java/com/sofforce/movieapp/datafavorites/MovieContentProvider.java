@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import static com.sofforce.movieapp.datafavorites.MovieContract.MovieEntry.TABLE_NAME;
 
@@ -46,7 +47,7 @@ public class MovieContentProvider extends ContentProvider {
     }
 
     @Override
-    public Cursor query(@NonNull Uri uri,  String[] strings,  String s,  String[] strings1,  String s1) {
+    public Cursor query(@NonNull Uri uri,  String[] projection,  String selection,  String[] selectionArgs,  String s1) {
 
         final SQLiteDatabase db = mMovieDbHelper.getReadableDatabase();
 
@@ -57,19 +58,37 @@ public class MovieContentProvider extends ContentProvider {
         switch (match){
             case MOVIES:
                 retCursor = db.query(TABLE_NAME,
-                        strings,
-                        s,
-                        strings1,
+                        projection,
+                        selection,
+                        selectionArgs,
                         s1,
                         null,
                         null
                         );
                 break;
+
+            case MOVIES_WITH_ID:
+
+                String id = uri.getPathSegments().get( 1 );
+                String mSelection = "_ID=?";
+                String[] mSelectionArgs = new String [] {id};
+
+                retCursor = db.query(TABLE_NAME,
+                        projection,
+                        mSelection,
+                        mSelectionArgs,
+                        s1,
+                        null,
+                        null
+                );
+                break;
+
             default:
                 throw new UnsupportedOperationException("unknown uri: " + uri);
         }
 
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
+        Log.d( "QUERTY FUNCTION", "The query is showing: F_Database______________" + retCursor.toString() );
 
         return retCursor;
     }
@@ -124,12 +143,52 @@ public class MovieContentProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+    public int delete(@NonNull Uri uri, @Nullable String id, @Nullable String[] selectionArgs) {
+
+        final SQLiteDatabase db = mMovieDbHelper.getWritableDatabase();
+        int match = sUriMatcher.match(uri);
+
+        int count = 0;
+        switch (match){
+            case MOVIES:
+                count = db.delete(TABLE_NAME, id, selectionArgs);
+                break;
+
+            case MOVIES_WITH_ID:
+                id = uri.getPathSegments().get(1);
+                String[] mSelectionArgs = new String [] {id};
+
+                count = db.delete( TABLE_NAME, "_ID=? " + id , mSelectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        return count;
     }
+
+
+
+
+
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
         return 0;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

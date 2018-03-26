@@ -120,6 +120,8 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     }
 
 
+
+
     //comment003 this is to inflate the menu on the actionbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -173,7 +175,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
                 * when a user clicks this item in the menu it will load all the
                 * favorites that the clicked on in the detailed view of the movie thumbnail
                 * */
-                loadFavorites();
+                this.loadFavorites();
                 return true;
         }
         return super.onOptionsItemSelected(item);

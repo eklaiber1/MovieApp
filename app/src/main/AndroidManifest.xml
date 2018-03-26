@@ -37,7 +37,9 @@
             android:authorities="com.sofforce.movieApp"
             android:exported="false" />
 
-        <activity android:name=".PlayTrailerVideo"></activity>
+        <activity android:name=".PlayTrailerVideo">
+
+        </activity>
     </application>
 
 </manifest>

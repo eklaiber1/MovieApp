@@ -2,6 +2,7 @@ package com.sofforce.movieapp;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,14 +13,17 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sofforce.movieapp.datafavorites.MovieContract;
+import com.sofforce.movieapp.datafavorites.MovieDbHelper;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -53,11 +57,11 @@ public class DetailedActivity extends AppCompatActivity {
     ArrayList<MovieReviews> reviewsArrayList;
     ArrayList<MovieVideos> videosArrayList;
 
+    MovieDbHelper mMovieDbHelper = new MovieDbHelper( getBaseContext() ) ;
 
 
     String pref ="http://image.tmdb.org/t/p/w342";
     String url;
-    String pref2 ="http://image.tmdb.org/t/p/w500";
 
 
     private String imageUri;
@@ -70,7 +74,7 @@ public class DetailedActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.detailedview);
+        setContentView(R.layout.detailedview_relative);
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = this.getSupportActionBar();
@@ -90,6 +94,8 @@ public class DetailedActivity extends AppCompatActivity {
          txtYear = (TextView) findViewById(R.id.movie_year);
          imageView = (ImageView) findViewById(R.id.grid_item_image);
          reviews = (ListView) findViewById(R.id.reviewsList);   //this is for the reviews List view
+         setListViewHeightBasedOnChildren( reviews );
+
          videos = (ListView) findViewById(R.id.videosList);   //this is for the reviews List view
 
         MovieStat object = (MovieStat) getIntent().getParcelableExtra("parcel");
@@ -135,9 +141,10 @@ public class DetailedActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 MovieVideos movieVideos =  videosArrayList.get(i);
-                Intent intent = new Intent(DetailedActivity.this, PlayTrailerVideo.class );
-                intent.putExtra( "parcel", movieVideos.getKey());
-                startActivity( intent );
+                String urlMovie = "https://www.youtube.com/watch?v=" + movieVideos.getKey() ;
+                Intent browswerIntent = new  Intent (Intent.ACTION_VIEW, Uri.parse( urlMovie ));
+                //browswerIntent.putExtra( "parcel", movieVideos.getKey());
+                startActivity( browswerIntent );
 
 
                 Log.d( "VIDEO_KEY", "this is the video Key____________________________: " + movieVideos.getKey() );
@@ -145,7 +152,38 @@ public class DetailedActivity extends AppCompatActivity {
             }
 
         });
+
+        String isInDatabase =  String.valueOf(movieId);
+        changeButtonFunct( Integer.valueOf(isInDatabase) );
+
+      Log.d( "___IS_FAVORITE_METHOD","This is the movieID " + isInDatabase);
+      Log.d( "___IS-IN-DATABASE",
+              "This movie ID number is in database: " + mMovieDbHelper.getItemID( Integer.valueOf(isInDatabase) ) );
     }
+
+
+    //this method queries to see if id is in the database and if it is it will change the
+    //name of the button and the function of the "add favorite" button to "Delete favorite"
+    public void changeButtonFunct( final Integer id) {
+
+        String deleteFav = "Delete Favorite";
+
+        mMovieDbHelper.isFavorite( String.valueOf(id) );
+        if (mMovieDbHelper.isFavorite( String.valueOf(id) )) {
+            favButton.setBackgroundColor( Color.RED );
+            favButton.setText(deleteFav);
+            favButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v)
+                {
+                mMovieDbHelper.delete( id);
+                }
+            });
+        }
+
+    }
+
+
+
 
     //this is the addFavorite() for the favorite button
     public void addFavorite(View view) {
@@ -174,6 +212,44 @@ public class DetailedActivity extends AppCompatActivity {
 
 
     }
+
+
+
+    //new method is to set the height in the listView for the thumbnail
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
+        View.MeasureSpec measureSpec =  new View.MeasureSpec();
+
+        try {
+
+            ListAdapter listAdapter = listView.getAdapter();
+            if (listAdapter == null) {
+                int desiredWidth = View.MeasureSpec.makeMeasureSpec( listView.getWidth(), View.MeasureSpec.UNSPECIFIED );
+                int totalHeight = 0;
+                View view = null;
+                for (int i = 0; i < listAdapter.getCount(); i++) {
+                    view = listAdapter.getView( i, view, listView );
+                    if (i == 0) {
+                        view.setLayoutParams( new ViewGroup.LayoutParams( desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT ) );
+
+                        view.measure( desiredWidth, View.MeasureSpec.UNSPECIFIED );
+                        totalHeight += view.getMeasuredHeight();
+                    }
+                }
+                ViewGroup.LayoutParams params = listView.getLayoutParams();
+                params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+                listView.setLayoutParams( params );
+            }
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+
+        return;
+    }
+
+
+
 
 
     @Override

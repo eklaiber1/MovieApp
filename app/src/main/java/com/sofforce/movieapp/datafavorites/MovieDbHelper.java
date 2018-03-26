@@ -1,6 +1,7 @@
 package com.sofforce.movieapp.datafavorites;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -46,49 +47,43 @@ public class MovieDbHelper extends SQLiteOpenHelper {
         return super.getReadableDatabase();
     }
 
-//
-//    public void deleteMovie(int id, String movieName) {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        String query = "DELETE FROM" + MovieEntry.TABLE_NAME +
-//                " WHERE " +
-//                MovieEntry._ID + " = '" + id + "'" +
-//                " AND " +
-//                MovieEntry.COLUMN_MOVIE_NAME + " = '" + movieName + "'";
-//        db.execSQL( query );
-//
-//        Log.d( "TAG", "deleteName: query: " + query );
-//        Log.d( "TAG", "deleteName: Deleting:  " + movieName + " from database." );
-//    }
-
-    /*
-    *This updates the name field in the database
-    * @newName
-    * @id
-    * @oldName
-    * */
-//    public void updateName(String name, int id, String oldName) {
-//
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        String query = "UPDATE " + MovieEntry.TABLE_NAME +
-//                " SET "
-//                + MovieEntry.COLUMN_MOVIE_NAME + " = '" + name +
-//                "' WHERE "
-//                + MovieEntry._ID + " = '" + id + "'" +
-//                " AND "
-//                + MovieEntry.COLUMN_MOVIE_NAME + " = '" + oldName + "'";
-//
-//        Log.d( "TAG", "updateName: query: " + query );
-//        Log.d( "TAG", "UpdateName: Setting name to " + name );
-//
-//        db.execSQL( query );
-//    }
+    @Override
+    public SQLiteDatabase getWritableDatabase() {
+        return super.getWritableDatabase();
+    }
 
 
-//    public void deleteAllDAtaInTable(String id) {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        db.delete( MovieEntry.TABLE_NAME, "_ID = * ", new String[] {id} );
-//    }
+    public boolean isFavorite(String id) {
 
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.query("favoriteMovies", new String[]{"_ID"}, "_ID=?", new String[]{id}, null, null, null);
+        if (c.moveToFirst()) {
+            if (c.getCount() > 0){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+
+
+    public void delete(int id) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM " + MovieEntry.TABLE_NAME + " WHERE " +
+                        MovieEntry._ID + " = '" + id + "'";
+        db.execSQL( query );
+    }
+
+    public Cursor getItemID(Integer id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query =  "SELECT " + MovieEntry._ID + " FROM " + MovieEntry.TABLE_NAME +
+                       " WHERE " + MovieEntry._ID + " = '" + id + "'" ;
+        Cursor data = db.rawQuery( query, null );
+        return  data;
+    }
 
 
 
