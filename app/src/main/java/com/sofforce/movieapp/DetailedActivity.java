@@ -57,7 +57,7 @@ public class DetailedActivity extends AppCompatActivity {
     ArrayList<MovieReviews> reviewsArrayList;
     ArrayList<MovieVideos> videosArrayList;
 
-    MovieDbHelper mMovieDbHelper = new MovieDbHelper( getBaseContext() ) ;
+    MovieDbHelper mMovieDbHelper = new MovieDbHelper( this ) ;
 
 
     String pref ="http://image.tmdb.org/t/p/w342";
@@ -159,6 +159,7 @@ public class DetailedActivity extends AppCompatActivity {
       Log.d( "___IS_FAVORITE_METHOD","This is the movieID " + isInDatabase);
       Log.d( "___IS-IN-DATABASE",
               "This movie ID number is in database: " + mMovieDbHelper.getItemID( Integer.valueOf(isInDatabase) ) );
+
     }
 
 
@@ -170,12 +171,13 @@ public class DetailedActivity extends AppCompatActivity {
 
         mMovieDbHelper.isFavorite( String.valueOf(id) );
         if (mMovieDbHelper.isFavorite( String.valueOf(id) )) {
-            favButton.setBackgroundColor( Color.RED );
+            favButton.setBackgroundColor( Color.parseColor( "#92200F" ) );
             favButton.setText(deleteFav);
+            favButton.setTextColor( Color.parseColor( "#000000" ) );
             favButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v)
                 {
-                mMovieDbHelper.delete( id);
+                    mMovieDbHelper.delete( id);
                 }
             });
         }

@@ -80,26 +80,20 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                MovieStat movie = arrayList.get(i);
 
-                Intent mIntent =  new Intent(MovieListActivity.this, DetailedActivity.class);
+                    MovieStat movie = arrayList.get( i );
 
-                  mIntent.putExtra("parcel", movie);
+                    Intent mIntent = new Intent( MovieListActivity.this, DetailedActivity.class );
 
-                startActivity(mIntent);
+                    mIntent.putExtra( "parcel", movie );
+
+                    startActivity( mIntent );
 
             }
+
         });
 
-//        theGridView.setOnClickListener( new OnDoubleTapListener() {
-//
-//            @Override
-//            public boolean onDoubleTap(MotionEvent motionEvent) {
-//                return false;
-//            }
-//
-//
-//        });
+
 
     }
 
@@ -230,13 +224,13 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
     }
 
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//
-//        // re-queries for all tasks
-//        getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, this);
-//    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // re-queries for all tasks
+        getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, this);
+    }
 
     //these are all the methods to be overwritten by the implemented interface
     @Override
@@ -285,9 +279,10 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.d( "TEST", "data " + data.getCount() );
 
+
         ArrayList<MovieStat> posterArray = new ArrayList<>();
         SQLiteDatabase mDb = mMovieDbHelper.getReadableDatabase();
-        data = mDb.query( MovieEntry.TABLE_NAME, new String[]{MovieEntry.COLUMN_MOVIE_POSTER, MovieEntry._ID, MovieEntry.COLUMN_MOVIE_NAME},
+        data = mDb.query( MovieEntry.TABLE_NAME, new String[]{MovieEntry.COLUMN_MOVIE_POSTER, MovieEntry._ID},
                 null,
                 null,
                 null,
@@ -295,8 +290,8 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
                 null );
         if (data.moveToFirst()) {
             do {
-                posterArray.add( new MovieStat( data.getString( data.getColumnIndex( MovieEntry.COLUMN_MOVIE_NAME )),
-                        data.getString( data.getColumnIndex( MovieEntry.COLUMN_MOVIE_POSTER ) ),
+                posterArray.add( new MovieStat( "",
+                         data.getString( data.getColumnIndex( MovieEntry.COLUMN_MOVIE_POSTER ) ),
                         0.0,
                         "",
                         0.0,
@@ -304,7 +299,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
                         0.0,
                         "",
                         data.getInt( data.getColumnIndex( MovieEntry._ID ) ) ) );
-                Log.d( "ARRAYCHECK", "movie poster " + data.getString(data.getColumnIndex( MovieEntry.COLUMN_MOVIE_POSTER )) );
+                Log.d( "ARRAYCHECK", "movie poster " + data.getString(data.getColumnIndex( MovieEntry._ID )) );
 
             } while (data.moveToNext());
 

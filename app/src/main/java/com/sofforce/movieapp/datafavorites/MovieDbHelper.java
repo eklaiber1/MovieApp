@@ -49,6 +49,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
     @Override
     public SQLiteDatabase getWritableDatabase() {
+
         return super.getWritableDatabase();
     }
 
@@ -62,7 +63,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
                 return true;
             }
         }
-
+        c.close();
         return false;
     }
 
@@ -75,6 +76,18 @@ public class MovieDbHelper extends SQLiteOpenHelper {
         String query = "DELETE FROM " + MovieEntry.TABLE_NAME + " WHERE " +
                         MovieEntry._ID + " = '" + id + "'";
         db.execSQL( query );
+        db.close();
+    }
+
+
+    public void deleteAll() {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM " + MovieEntry.TABLE_NAME;
+        db.execSQL( query );
+
+        db.close();
+
     }
 
     public Cursor getItemID(Integer id) {
@@ -82,10 +95,18 @@ public class MovieDbHelper extends SQLiteOpenHelper {
         String query =  "SELECT " + MovieEntry._ID + " FROM " + MovieEntry.TABLE_NAME +
                        " WHERE " + MovieEntry._ID + " = '" + id + "'" ;
         Cursor data = db.rawQuery( query, null );
+        data.close();
+
         return  data;
+
     }
 
-
+//    public void update() {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//
+//        String query = "UPDATE " + MovieEntry.TABLE_NAME + "_ID";
+//        db.update( query );
+//    }
 
 
 
