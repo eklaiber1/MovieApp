@@ -35,6 +35,12 @@ public class MovieContract  {
         //this is the movie name
         public static final String COLUMN_MOVIE_NAME = "movie_name";
 
+        //this is the movie date
+        public static final String COLUMN_MOVIE_DATE = "movie_date";
+
+        //this is the movie vote
+        public static final String COLUMN_MOVIE_VOTE = "movie_vote";
+
 
     }
 

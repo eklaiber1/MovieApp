@@ -180,16 +180,4 @@ public class MovieContentProvider extends ContentProvider {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 }

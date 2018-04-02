@@ -33,6 +33,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
         LoaderManager.LoaderCallbacks<Cursor> {
 
     public ArrayList<MovieStat> arrayList;
+    public ArrayList<MovieStat> posterArray;
     GridView theGridView;
     ConnectionDetector cd =  new ConnectionDetector(this);
     MovieDbHelper mMovieDbHelper;
@@ -80,10 +81,9 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+                MovieStat movie = arrayList.get( i );
 
-                    MovieStat movie = arrayList.get( i );
-
-                    Intent mIntent = new Intent( MovieListActivity.this, DetailedActivity.class );
+                Intent mIntent = new Intent( MovieListActivity.this, DetailedActivity.class );
 
                     mIntent.putExtra( "parcel", movie );
 
@@ -92,7 +92,6 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
             }
 
         });
-
 
 
     }
@@ -170,6 +169,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
                 * favorites that the clicked on in the detailed view of the movie thumbnail
                 * */
                 this.loadFavorites();
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -280,9 +280,10 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
         Log.d( "TEST", "data " + data.getCount() );
 
 
-        ArrayList<MovieStat> posterArray = new ArrayList<>();
+        posterArray = new ArrayList<>();
         SQLiteDatabase mDb = mMovieDbHelper.getReadableDatabase();
-        data = mDb.query( MovieEntry.TABLE_NAME, new String[]{MovieEntry.COLUMN_MOVIE_POSTER, MovieEntry._ID},
+        data = mDb.query( MovieEntry.TABLE_NAME, new String[]{MovieEntry.COLUMN_MOVIE_NAME, MovieEntry.COLUMN_MOVIE_POSTER, MovieEntry.COLUMN_MOVIE_DATE,
+                                                              MovieEntry.COLUMN_MOVIE_VOTE, MovieEntry._ID},
                 null,
                 null,
                 null,
@@ -290,19 +291,20 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
                 null );
         if (data.moveToFirst()) {
             do {
-                posterArray.add( new MovieStat( "",
+                posterArray.add( new MovieStat( data.getString( data.getColumnIndex( MovieEntry.COLUMN_MOVIE_NAME ) ),
                          data.getString( data.getColumnIndex( MovieEntry.COLUMN_MOVIE_POSTER ) ),
                         0.0,
                         "",
                         0.0,
-                        "",
-                        0.0,
+                        data.getString( data.getColumnIndex( MovieEntry.COLUMN_MOVIE_DATE ) ),
+                        data.getDouble( data.getColumnIndex( MovieEntry.COLUMN_MOVIE_VOTE ) ),
                         "",
                         data.getInt( data.getColumnIndex( MovieEntry._ID ) ) ) );
                 Log.d( "ARRAYCHECK", "movie poster " + data.getString(data.getColumnIndex( MovieEntry._ID )) );
 
             } while (data.moveToNext());
 
+            arrayList = posterArray;
         }
 
         setAdapter( posterArray );

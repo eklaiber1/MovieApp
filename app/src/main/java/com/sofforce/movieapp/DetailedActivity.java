@@ -67,6 +67,8 @@ public class DetailedActivity extends AppCompatActivity {
     private String imageUri;
     private int movieId;
     private String movieTitle;
+    private String movieDate;
+    private double movieRating;
     private static final String API_KEY = BuildConfig.API_KEY;
 
 
@@ -107,6 +109,8 @@ public class DetailedActivity extends AppCompatActivity {
 
             movieId = object.getIdNumber();
             movieTitle = object.getTitle();
+            movieDate = object.getReleaseDate();
+            movieRating = object.getVoteAverage();
             imageUri = url;
 
 
@@ -203,6 +207,10 @@ public class DetailedActivity extends AppCompatActivity {
         contentValues.put(MovieContract.MovieEntry._ID, movieId);
         contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_NAME, movieTitle);
         contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_POSTER, imageUri);
+        contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_DATE, movieDate);
+        contentValues.put(MovieContract.MovieEntry.COLUMN_MOVIE_VOTE, movieRating);
+
+
 
         Uri uri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, contentValues);
 
@@ -395,11 +403,6 @@ public class DetailedActivity extends AppCompatActivity {
     //when the movie thumbnail gets clicked it will pass the Key from the MovieVideo class
     //that will when be passed to an intent to another activity that will load the url
     //and play the trailer for the movie
-
-
-
-
-
     //| -- authority  --     | --   query   --   |
     // http://www.youtube.com/watch?v=hFS9MrlJMXw
 

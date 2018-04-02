@@ -16,7 +16,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "moviesDB.db";
 
-    private static final int VERSION = 1;
+    private static final int VERSION = 5;
 
     //the constructor
     public MovieDbHelper(Context context) {
@@ -37,8 +37,11 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL( "DROP TABLE IF EXISTS " + MovieEntry.TABLE_NAME );
-        onCreate( db );
+        //db.execSQL( "DROP TABLE IF EXISTS " + MovieEntry.TABLE_NAME );
+        //onCreate( db );
+       //final String DATABASE_ALTER = "ALTER TABLE " + MovieEntry.TABLE_NAME + " ADD COLUMN " + MovieEntry.COLUMN_MOVIE_DATE + " string;" ;
+        final String DATABASE_ALTER01 = "ALTER TABLE " + MovieEntry.TABLE_NAME + " ADD COLUMN " + MovieEntry.COLUMN_MOVIE_VOTE + " string;" ;
+        db.execSQL( DATABASE_ALTER01 );
     }
 
     @Override
@@ -101,12 +104,7 @@ public class MovieDbHelper extends SQLiteOpenHelper {
 
     }
 
-//    public void update() {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//
-//        String query = "UPDATE " + MovieEntry.TABLE_NAME + "_ID";
-//        db.update( query );
-//    }
+
 
 
 
