@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 
 import static com.sofforce.movieapp.datafavorites.MovieContract.MovieEntry.TABLE_NAME;
@@ -21,6 +22,8 @@ import static com.sofforce.movieapp.datafavorites.MovieContract.MovieEntry.TABLE
 public class MovieContentProvider extends ContentProvider {
 
     private MovieDbHelper mMovieDbHelper;
+    private SQLiteDatabase db;
+
 
     public static final int  MOVIES = 100;
     public static final int MOVIES_WITH_ID = 101;
@@ -43,6 +46,8 @@ public class MovieContentProvider extends ContentProvider {
     public boolean onCreate() {
         Context context = getContext();
         mMovieDbHelper = new MovieDbHelper(context);
+        db = mMovieDbHelper.getWritableDatabase();
+
         return true;
     }
 
@@ -145,7 +150,7 @@ public class MovieContentProvider extends ContentProvider {
     @Override
     public int delete(@NonNull Uri uri, @Nullable String id, @Nullable String[] selectionArgs) {
 
-        final SQLiteDatabase db = mMovieDbHelper.getWritableDatabase();
+        db = mMovieDbHelper.getWritableDatabase();
         int match = sUriMatcher.match(uri);
 
         int count = 0;
@@ -175,8 +180,25 @@ public class MovieContentProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String selection, @Nullable String[] selectionArgs) {
+        int count = 0;
+        int match = sUriMatcher.match(uri);
 
-        return 0;
+        switch (match) {
+            case MOVIES:
+                count = db.update(TABLE_NAME, contentValues, selection, selectionArgs);
+                break;
+
+            case MOVIES_WITH_ID:
+                count = db.update(TABLE_NAME, contentValues,
+                        MovieContract.MovieEntry._ID + " = " + uri.getPathSegments().get(1) +
+                                  (!TextUtils.isEmpty(selection) ? " " + " AND (" +selection + ')' : ""), selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri );
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        return count;
     }
 
 

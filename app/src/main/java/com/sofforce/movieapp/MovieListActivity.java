@@ -2,8 +2,8 @@ package com.sofforce.movieapp;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -17,8 +17,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
-
-import com.sofforce.movieapp.datafavorites.MovieDbHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,7 +34,6 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     public ArrayList<MovieStat> posterArray;
     GridView theGridView;
     ConnectionDetector cd =  new ConnectionDetector(this);
-    MovieDbHelper mMovieDbHelper;
 
     HelperAsync helperAsync = new HelperAsync();
     private static final String TAG = MovieListActivity.class.getSimpleName();
@@ -44,6 +41,8 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     private static final int TASK_LOADER_ID = 0;
 
     private static final String API_KEY = BuildConfig.API_KEY;
+
+    private final String SAVED_STATE = "SavedState";
 
 
 
@@ -56,8 +55,6 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
         theGridView = (GridView) findViewById(R.id.movieListgrid);
         Toolbar toolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);
-        mMovieDbHelper = new MovieDbHelper (this);
-
          arrayList = new ArrayList<>();
 
 
@@ -93,8 +90,25 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
         });
 
-
     }
+
+
+    //this will save the state of the app when it is rotated
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState( outState, outPersistentState );
+    }
+
+
+
+    //this will also help save the state of the app when it is rotate as well
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState( savedInstanceState );
+    }
+
+
+
 
     public void loadData(String string){
 
@@ -253,8 +267,11 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
 
                 try {
-                    return getContentResolver().query(MovieEntry.CONTENT_URI,
-                            null,
+                    return getContentResolver().query(MovieEntry.CONTENT_URI, new String[]{MovieEntry.COLUMN_MOVIE_NAME,
+                                                                                            MovieEntry.COLUMN_MOVIE_POSTER,
+                                                                                            MovieEntry.COLUMN_MOVIE_DATE,
+                                                                                            MovieEntry.COLUMN_MOVIE_VOTE,
+                                                                                            MovieEntry._ID},
                             null,
                             null,
                             null);
@@ -279,16 +296,8 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.d( "TEST", "data " + data.getCount() );
 
-
         posterArray = new ArrayList<>();
-        SQLiteDatabase mDb = mMovieDbHelper.getReadableDatabase();
-        data = mDb.query( MovieEntry.TABLE_NAME, new String[]{MovieEntry.COLUMN_MOVIE_NAME, MovieEntry.COLUMN_MOVIE_POSTER, MovieEntry.COLUMN_MOVIE_DATE,
-                                                              MovieEntry.COLUMN_MOVIE_VOTE, MovieEntry._ID},
-                null,
-                null,
-                null,
-                null,
-                null );
+
         if (data.moveToFirst()) {
             do {
                 posterArray.add( new MovieStat( data.getString( data.getColumnIndex( MovieEntry.COLUMN_MOVIE_NAME ) ),
@@ -314,5 +323,8 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
     }
+
+
+
 }
 

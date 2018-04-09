@@ -1,5 +1,6 @@
 package com.sofforce.movieapp;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.graphics.Color;
@@ -171,6 +172,8 @@ public class DetailedActivity extends AppCompatActivity {
     //name of the button and the function of the "add favorite" button to "Delete favorite"
     public void changeButtonFunct( final Integer id) {
 
+        final ContentResolver contentResolver = getContentResolver();
+
         String deleteFav = "Delete Favorite";
 
         mMovieDbHelper.isFavorite( String.valueOf(id) );
@@ -181,7 +184,14 @@ public class DetailedActivity extends AppCompatActivity {
             favButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v)
                 {
-                    mMovieDbHelper.delete( id);
+
+                    contentResolver.delete( MovieContract.MovieEntry.CONTENT_URI, "_ID=?",  new String[] {String.valueOf( id )});
+                    favButton.setText( "ADD FAVORITE" );
+                    favButton.setBackgroundColor( Color.parseColor( "#E28413" ) );
+                    favButton.setTextColor( Color.parseColor( "#FBF5F3" ) );
+
+
+
                 }
             });
         }
