@@ -36,7 +36,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     ConnectionDetector cd =  new ConnectionDetector(this);
 
     HelperAsync helperAsync = new HelperAsync();
-    private static final String TAG = MovieListActivity.class.getSimpleName();
+    private static final String TAG = "ACTIVITY_LIFECYCLE";
 
     private static final int TASK_LOADER_ID = 0;
 
@@ -49,6 +49,8 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     //comment001 this is the onCreate method that initiate the program
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d( TAG,  "onCreate: in" );
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_list);
 
@@ -90,25 +92,91 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
         });
 
+        if (savedInstanceState != null) {
+            arrayList = savedInstanceState.getParcelableArrayList( SAVED_STATE );
+            setAdapter( arrayList );
+        }
+
+
+
+
+
+
+        Log.d( TAG,  "onCreate: out" );
+
     }
+
+
+
 
 
     //this will save the state of the app when it is rotated
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        Log.d( TAG,  "onSaveInstanceState: in" );
+
         super.onSaveInstanceState( outState, outPersistentState );
+        outState.putParcelableArrayList( SAVED_STATE,  arrayList);
+
+        Log.d( TAG,  "onSaveInstanceState: out" );
+
     }
-
-
 
     //this will also help save the state of the app when it is rotate as well
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        Log.d( TAG,  "onRestoreInstanceState: in" );
+
         super.onRestoreInstanceState( savedInstanceState );
+        savedInstanceState.getParcelableArrayList( SAVED_STATE );
+        Log.d( TAG,  "onRestoreInstanceState: out" );
+
     }
 
+    @Override
+    protected void onResume() {
+        Log.d( TAG,  "onResume: in" );
 
+        super.onResume();
+        Log.d( TAG,  "onResume: out" );
 
+    }
+
+    @Override
+    protected void onPause() {
+        Log.d( TAG,  "onPause: in" );
+
+        super.onPause();
+        Log.d( TAG,  "onPause: out" );
+
+    }
+
+    @Override
+    protected void onRestart() {
+        Log.d( TAG,  "onRestart: in" );
+
+        super.onRestart();
+        Log.d( TAG,  "onRestart: out" );
+
+    }
+
+    @Override
+    protected void onStart() {
+        Log.d( TAG,  "onStart: in" );
+
+        super.onStart();
+        Log.d( TAG,  "onStart: out" );
+
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d( TAG,  "onStop: in" );
+
+        super.onStop();
+        Log.d( TAG,  "onStop: out" );
+
+    }
 
     public void loadData(String string){
 
@@ -238,13 +306,13 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // re-queries for all tasks
-        getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, this);
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//        // re-queries for all tasks
+//        getSupportLoaderManager().restartLoader(TASK_LOADER_ID, null, this);
+//    }
 
     //these are all the methods to be overwritten by the implemented interface
     @Override

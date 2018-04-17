@@ -165,7 +165,19 @@ public class DetailedActivity extends AppCompatActivity {
       Log.d( "___IS-IN-DATABASE",
               "This movie ID number is in database: " + mMovieDbHelper.getItemID( Integer.valueOf(isInDatabase) ) );
 
+//        Parcelable state = reviews.onSaveInstanceState();
+//        reviews.onRestoreInstanceState(state);
+//
+//
+//        Parcelable stateVid = videos.onSaveInstanceState();
+//        videos.onRestoreInstanceState(stateVid);
+
+
     }
+
+
+
+
 
 
     //this method queries to see if id is in the database and if it is it will change the
