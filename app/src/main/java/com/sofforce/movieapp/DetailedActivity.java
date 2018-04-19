@@ -72,6 +72,9 @@ public class DetailedActivity extends AppCompatActivity {
     private double movieRating;
     private static final String API_KEY = BuildConfig.API_KEY;
 
+    private final String SAVED_LIST_REVIEW = "reviews";
+    int savedPosition = 0;
+
 
 
     @Override
@@ -99,7 +102,9 @@ public class DetailedActivity extends AppCompatActivity {
          reviews = (ListView) findViewById(R.id.reviewsList);   //this is for the reviews List view
          setListViewHeightBasedOnChildren( reviews );
 
-         videos = (ListView) findViewById(R.id.videosList);   //this is for the reviews List view
+         videos = (ListView) findViewById(R.id.videosList);   //this is for the videos List view
+         setListViewHeightBasedOnChildren( videos );
+
 
         MovieStat object = (MovieStat) getIntent().getParcelableExtra("parcel");
             txtName.setText(object.getTitle());
@@ -148,7 +153,6 @@ public class DetailedActivity extends AppCompatActivity {
                 MovieVideos movieVideos =  videosArrayList.get(i);
                 String urlMovie = "https://www.youtube.com/watch?v=" + movieVideos.getKey() ;
                 Intent browswerIntent = new  Intent (Intent.ACTION_VIEW, Uri.parse( urlMovie ));
-                //browswerIntent.putExtra( "parcel", movieVideos.getKey());
                 startActivity( browswerIntent );
 
 
@@ -165,18 +169,27 @@ public class DetailedActivity extends AppCompatActivity {
       Log.d( "___IS-IN-DATABASE",
               "This movie ID number is in database: " + mMovieDbHelper.getItemID( Integer.valueOf(isInDatabase) ) );
 
-//        Parcelable state = reviews.onSaveInstanceState();
-//        reviews.onRestoreInstanceState(state);
-//
-//
-//        Parcelable stateVid = videos.onSaveInstanceState();
-//        videos.onRestoreInstanceState(stateVid);
 
 
     }
 
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
 
+        outState.putParcelableArrayList( SAVED_LIST_REVIEW, reviewsArrayList );
+        outState.putParcelableArrayList( SAVED_LIST_REVIEW, videosArrayList );
+        super.onSaveInstanceState( outState );
+
+    }
+
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState( savedInstanceState );
+        savedInstanceState.getParcelableArrayList( SAVED_LIST_REVIEW );
+
+    }
 
 
 

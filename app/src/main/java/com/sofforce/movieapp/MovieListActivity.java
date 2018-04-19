@@ -3,7 +3,6 @@ package com.sofforce.movieapp;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -43,6 +42,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     private static final String API_KEY = BuildConfig.API_KEY;
 
     private final String SAVED_STATE = "SavedState";
+    //int index = theGridView.getFirstVisiblePosition();
 
 
 
@@ -66,12 +66,12 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
                     Toast.makeText(MovieListActivity.this, "You are not connected", Toast.LENGTH_SHORT).show();
 
                 }
-        try {
-
-            loadData("http://api.themoviedb.org/3/movie/popular?api_key=");
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+//        try {
+//
+//            loadData("http://api.themoviedb.org/3/movie/popular?api_key=");
+//        } catch (NullPointerException e) {
+//            e.printStackTrace();
+//        }
 
 
         //comment002 this will send you to the detailedview when you click on a image
@@ -95,11 +95,15 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
         if (savedInstanceState != null) {
             arrayList = savedInstanceState.getParcelableArrayList( SAVED_STATE );
             setAdapter( arrayList );
+        } else {
+
+            try {
+
+                loadData("http://api.themoviedb.org/3/movie/popular?api_key=");
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
         }
-
-
-
-
 
 
         Log.d( TAG,  "onCreate: out" );
@@ -112,10 +116,10 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
     //this will save the state of the app when it is rotated
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+    public void onSaveInstanceState(Bundle outState) {
         Log.d( TAG,  "onSaveInstanceState: in" );
 
-        super.onSaveInstanceState( outState, outPersistentState );
+        super.onSaveInstanceState( outState );
         outState.putParcelableArrayList( SAVED_STATE,  arrayList);
 
         Log.d( TAG,  "onSaveInstanceState: out" );
@@ -129,6 +133,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
 
         super.onRestoreInstanceState( savedInstanceState );
         savedInstanceState.getParcelableArrayList( SAVED_STATE );
+
         Log.d( TAG,  "onRestoreInstanceState: out" );
 
     }
@@ -265,7 +270,9 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
     @Override
     public void onPostExecute(String s) {
 
-        arrayList.clear();
+
+                arrayList.clear();
+
 
             try {
                 JSONObject jsonObject = new JSONObject(s);

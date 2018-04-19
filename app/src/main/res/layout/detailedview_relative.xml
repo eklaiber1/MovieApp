@@ -96,39 +96,42 @@
             android:textColor="@color/textcolor"
             android:textSize="14dp" />
 
-        <LinearLayout
-            android:id="@+id/linearBottom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/movie_overview"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="14dp"
-            android:orientation="vertical"
-            android:padding="5dp">
 
 
-            <ListView
-                android:id="@+id/reviewsList"
+            <LinearLayout
+                android:id="@+id/linearBottom"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="10dp"
-                android:layout_marginTop="0dp">
+                android:layout_below="@+id/movie_overview"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="14dp"
+                android:orientation="vertical"
+                android:padding="5dp">
 
-            </ListView>
 
-            <ListView
-                android:id="@+id/videosList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:padding="10dp"
-                android:layout_marginBottom="0dp">
+                <ListView
+                    android:id="@+id/reviewsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="0dp"
+                    android:padding="10dp"
+                    android:scrollingCache="true">
 
-            </ListView>
+                </ListView>
 
-        </LinearLayout>
+                <ListView
+                    android:id="@+id/videosList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="0dp"
+                    android:padding="10dp"
+                    android:scrollingCache="true">
 
+                </ListView>
+
+            </LinearLayout>
 
     </RelativeLayout>
 
