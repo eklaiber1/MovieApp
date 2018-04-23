@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -51,7 +52,7 @@ public class DetailedActivity extends AppCompatActivity {
     ImageView imageView;
     Button favButton;
 
-
+    static LinearLayout linearBottom;
     ListView reviews;
     ListView videos;
 
@@ -99,11 +100,15 @@ public class DetailedActivity extends AppCompatActivity {
          txtOverview = (TextView) findViewById(R.id.movie_overview);
          txtYear = (TextView) findViewById(R.id.movie_year);
          imageView = (ImageView) findViewById(R.id.grid_item_image);
+
+         //this is the view ID of the linearLayout
+         linearBottom = (LinearLayout) findViewById( R.id.linearBottom );
+
          reviews = (ListView) findViewById(R.id.reviewsList);   //this is for the reviews List view
-         setListViewHeightBasedOnChildren( reviews );
+         //setListViewHeightBasedOnChildren( reviews );
 
          videos = (ListView) findViewById(R.id.videosList);   //this is for the videos List view
-         setListViewHeightBasedOnChildren( videos );
+         //setListViewHeightBasedOnChildren( reviews );
 
 
         MovieStat object = (MovieStat) getIntent().getParcelableExtra("parcel");
@@ -170,6 +175,12 @@ public class DetailedActivity extends AppCompatActivity {
               "This movie ID number is in database: " + mMovieDbHelper.getItemID( Integer.valueOf(isInDatabase) ) );
 
 
+//      if (savedInstanceState != null) {
+//          Parcelable state = videos.onSaveInstanceState();
+//            DetailedActivity.videos.this.setAdapter2();
+//          videos.onRestoreInstanceState( state );
+//      }
+
 
     }
 
@@ -177,9 +188,9 @@ public class DetailedActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
+        super.onSaveInstanceState( outState );
         outState.putParcelableArrayList( SAVED_LIST_REVIEW, reviewsArrayList );
         outState.putParcelableArrayList( SAVED_LIST_REVIEW, videosArrayList );
-        super.onSaveInstanceState( outState );
 
     }
 
@@ -264,24 +275,25 @@ public class DetailedActivity extends AppCompatActivity {
     public static void setListViewHeightBasedOnChildren(ListView listView) {
         View.MeasureSpec measureSpec =  new View.MeasureSpec();
 
+
         try {
 
             ListAdapter listAdapter = listView.getAdapter();
-            if (listAdapter == null) {
-                int desiredWidth = View.MeasureSpec.makeMeasureSpec( listView.getWidth(), View.MeasureSpec.UNSPECIFIED );
+            if (listAdapter != null) {
+                int desiredWidth = measureSpec.makeMeasureSpec( listView.getWidth(), View.MeasureSpec.UNSPECIFIED );
                 int totalHeight = 0;
-                View view = null;
+                //View view = null;
                 for (int i = 0; i < listAdapter.getCount(); i++) {
-                    view = listAdapter.getView( i, view, listView );
-                    if (i == 0) {
+                        View view = listAdapter.getView( i, null, listView );
+
                         view.setLayoutParams( new ViewGroup.LayoutParams( desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT ) );
 
                         view.measure( desiredWidth, View.MeasureSpec.UNSPECIFIED );
+
                         totalHeight += view.getMeasuredHeight();
-                    }
                 }
                 ViewGroup.LayoutParams params = listView.getLayoutParams();
-                params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
+                params.height = (int) totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
                 listView.setLayoutParams( params );
             }
 
@@ -372,6 +384,8 @@ public class DetailedActivity extends AppCompatActivity {
                     getApplicationContext(), R.id.reviewsList, movieReviews
             );
             reviews.setAdapter( adapter );
+            setListViewHeightBasedOnChildren( reviews );
+
         }
 
 
@@ -433,6 +447,8 @@ public class DetailedActivity extends AppCompatActivity {
                 getApplicationContext(), R.id.videosList, movieVideos
         );
         videos.setAdapter( adapter );
+        setListViewHeightBasedOnChildren( videos );
+
     }
 
     //when the movie thumbnail gets clicked it will pass the Key from the MovieVideo class
@@ -442,4 +458,8 @@ public class DetailedActivity extends AppCompatActivity {
     // http://www.youtube.com/watch?v=hFS9MrlJMXw
 
     //http://i.ytimg.com/vi/59ca73b7c3a36803c700bab9/hqdefault.jpg
+
+    // this for the breaking point
+   // https://www.learnhowtoprogram.com/android/user-interface-basics-637d41b1-35dc-400a-bcc3-65794760474d/debugging-breakpoints-and-the-android-debugger
+
 }
