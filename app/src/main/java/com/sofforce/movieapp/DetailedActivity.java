@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -75,6 +76,7 @@ public class DetailedActivity extends AppCompatActivity {
 
     private final String SAVED_LIST_REVIEW = "reviews";
     int savedPosition = 0;
+    NestedScrollView scrollView;
 
 
 
@@ -109,6 +111,10 @@ public class DetailedActivity extends AppCompatActivity {
 
          videos = (ListView) findViewById(R.id.videosList);   //this is for the videos List view
          //setListViewHeightBasedOnChildren( reviews );
+
+        //this is the initailization of the scrollview
+       // scrollView =  (ScrollView) findViewById( R.id.detailed_scrollview );
+         scrollView = (NestedScrollView) findViewById( R.id.detailed_scrollview );
 
 
         MovieStat object = (MovieStat) getIntent().getParcelableExtra("parcel");
@@ -175,12 +181,12 @@ public class DetailedActivity extends AppCompatActivity {
               "This movie ID number is in database: " + mMovieDbHelper.getItemID( Integer.valueOf(isInDatabase) ) );
 
 
-//      if (savedInstanceState != null) {
-//          Parcelable state = videos.onSaveInstanceState();
-//            DetailedActivity.videos.this.setAdapter2();
-//          videos.onRestoreInstanceState( state );
-//      }
 
+      if (savedInstanceState != null) {
+          setAdapter( reviewsArrayList );
+      } else {
+          setAdapter2( videosArrayList );
+      }
 
     }
 
@@ -189,8 +195,9 @@ public class DetailedActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
 
         super.onSaveInstanceState( outState );
-        outState.putParcelableArrayList( SAVED_LIST_REVIEW, reviewsArrayList );
         outState.putParcelableArrayList( SAVED_LIST_REVIEW, videosArrayList );
+
+        Log.d( "SAVED_INSTANCE", "this is what is saved " + outState.toString() );
 
     }
 
@@ -198,7 +205,9 @@ public class DetailedActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState( savedInstanceState );
-        savedInstanceState.getParcelableArrayList( SAVED_LIST_REVIEW );
+        savedInstanceState.getParcelable( SAVED_LIST_REVIEW );
+
+        Log.d( "RESTORED_INSTANCE", "this is what is restored " + savedInstanceState.toString() );
 
     }
 
@@ -282,13 +291,13 @@ public class DetailedActivity extends AppCompatActivity {
             if (listAdapter != null) {
                 int desiredWidth = measureSpec.makeMeasureSpec( listView.getWidth(), View.MeasureSpec.UNSPECIFIED );
                 int totalHeight = 0;
-                //View view = null;
                 for (int i = 0; i < listAdapter.getCount(); i++) {
                         View view = listAdapter.getView( i, null, listView );
 
                         view.setLayoutParams( new ViewGroup.LayoutParams( desiredWidth, ViewGroup.LayoutParams.WRAP_CONTENT ) );
 
-                        view.measure( desiredWidth, View.MeasureSpec.UNSPECIFIED );
+                        view.measure( desiredWidth, View.MeasureSpec.UNSPECIFIED);
+
 
                         totalHeight += view.getMeasuredHeight();
                 }
@@ -384,8 +393,10 @@ public class DetailedActivity extends AppCompatActivity {
                     getApplicationContext(), R.id.reviewsList, movieReviews
             );
             reviews.setAdapter( adapter );
-            setListViewHeightBasedOnChildren( reviews );
 
+            if (reviews != null ) {
+                setListViewHeightBasedOnChildren( reviews );
+            }
         }
 
 
@@ -447,8 +458,10 @@ public class DetailedActivity extends AppCompatActivity {
                 getApplicationContext(), R.id.videosList, movieVideos
         );
         videos.setAdapter( adapter );
-        setListViewHeightBasedOnChildren( videos );
 
+        if (videos != null ) {
+            setListViewHeightBasedOnChildren( videos );
+        }
     }
 
     //when the movie thumbnail gets clicked it will pass the Key from the MovieVideo class
@@ -462,4 +475,6 @@ public class DetailedActivity extends AppCompatActivity {
     // this for the breaking point
    // https://www.learnhowtoprogram.com/android/user-interface-basics-637d41b1-35dc-400a-bcc3-65794760474d/debugging-breakpoints-and-the-android-debugger
 
+    //this is for the height of the listviews
+    //https://stackoverflow.com/questions/14020859/change-height-of-a-listview-dynamicallyandroid
 }

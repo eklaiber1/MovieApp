@@ -122,6 +122,7 @@ public class MovieListActivity extends AppCompatActivity implements HelperAsync.
         super.onSaveInstanceState( outState );
         outState.putParcelableArrayList( SAVED_STATE,  arrayList);
 
+
         Log.d( TAG,  "onSaveInstanceState: out" );
 
     }
