@@ -57,8 +57,8 @@ public class DetailedActivity extends AppCompatActivity {
     ListView reviews;
     ListView videos;
 
-    ArrayList<MovieReviews> reviewsArrayList;
-    ArrayList<MovieVideos> videosArrayList;
+    ArrayList<MovieReviews> reviewsArrayList =  new ArrayList<>();
+    ArrayList<MovieVideos> videosArrayList =  new ArrayList<>();
 
     MovieDbHelper mMovieDbHelper = new MovieDbHelper( this ) ;
 
@@ -75,8 +75,12 @@ public class DetailedActivity extends AppCompatActivity {
     private static final String API_KEY = BuildConfig.API_KEY;
 
     private final String SAVED_LIST_REVIEW = "reviews";
+    private final String SAVED_LIST_VIDEO = "videos";
+
+
     int savedPosition = 0;
     NestedScrollView scrollView;
+
 
 
 
@@ -88,8 +92,6 @@ public class DetailedActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = this.getSupportActionBar();
 
-        reviewsArrayList =  new ArrayList<>();
-        videosArrayList =  new ArrayList<>();
 
 
         if (actionBar != null) {
@@ -115,6 +117,8 @@ public class DetailedActivity extends AppCompatActivity {
         //this is the initailization of the scrollview
        // scrollView =  (ScrollView) findViewById( R.id.detailed_scrollview );
          scrollView = (NestedScrollView) findViewById( R.id.detailed_scrollview );
+
+
 
 
         MovieStat object = (MovieStat) getIntent().getParcelableExtra("parcel");
@@ -146,13 +150,6 @@ public class DetailedActivity extends AppCompatActivity {
 
 
 
-        // MovieReviews object2 =  (MovieReviews) getParcelable("parcel");
-        ReviewsAsync reviewsAsync = new ReviewsAsync();
-        reviewsAsync.execute(reviewsUrl+API_KEY);
-
-        VideosAsync videosAsync =  new VideosAsync();
-        videosAsync.execute( videosUrl+API_KEY );
-
         //when the movie thumbnail gets clicked it will pass the Key from the MovieVideo class
         //that will when be passed to an intent to another activity that will load the url
         //and play the trailer for the movie
@@ -182,11 +179,27 @@ public class DetailedActivity extends AppCompatActivity {
 
 
 
-      if (savedInstanceState != null) {
-          setAdapter( reviewsArrayList );
-      } else {
-          setAdapter2( videosArrayList );
-      }
+          if (savedInstanceState != null) {
+              reviewsArrayList = savedInstanceState.getParcelableArrayList(SAVED_LIST_REVIEW);
+
+              videosArrayList = savedInstanceState.getParcelableArrayList(SAVED_LIST_VIDEO);
+
+              setAdapter( reviewsArrayList );
+              setAdapter2( videosArrayList );
+
+
+          } else {
+
+              ReviewsAsync reviewsAsync = new ReviewsAsync();
+              reviewsAsync.execute(reviewsUrl+API_KEY);
+
+              VideosAsync videosAsync =  new VideosAsync();
+              videosAsync.execute( videosUrl+API_KEY );
+
+//              setAdapter( reviewsArrayList );
+//              setAdapter2( videosArrayList );
+
+          }
 
     }
 
@@ -194,8 +207,11 @@ public class DetailedActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
+        outState.putParcelableArrayList( SAVED_LIST_VIDEO, videosArrayList );
+        outState.putParcelableArrayList( SAVED_LIST_REVIEW, reviewsArrayList );
+
+
         super.onSaveInstanceState( outState );
-        outState.putParcelableArrayList( SAVED_LIST_REVIEW, videosArrayList );
 
         Log.d( "SAVED_INSTANCE", "this is what is saved " + outState.toString() );
 
@@ -205,7 +221,9 @@ public class DetailedActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState( savedInstanceState );
-        savedInstanceState.getParcelable( SAVED_LIST_REVIEW );
+        savedInstanceState.getParcelableArrayList( SAVED_LIST_VIDEO );
+        savedInstanceState.getParcelableArrayList( SAVED_LIST_REVIEW );
+
 
         Log.d( "RESTORED_INSTANCE", "this is what is restored " + savedInstanceState.toString() );
 
